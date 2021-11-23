@@ -1,0 +1,195 @@
+/*By DjelalEddine@gmail.com*/
+.avatar {
+    width:50px;
+}
+.avatar > img{
+    width:40px;
+    height:40px;
+    border-radius:10%;
+}
+/*Card*/
+.panel-thumb{
+    margin:5px auto;
+    text-align:center;
+}
+.panel-thumb .avatar-card {
+    text-align:center;
+    height:200px;
+    margin:auto;
+    overflow:hidden;
+}
+.panel-thumb .avatar-card > img{
+    max-width:200px;
+    max-height:200px;
+}
+
+/* table*/
+.panel-table{
+    animation-duration:3s;
+}
+
+.panel-table .panel-body .table{
+    margin:0px;
+}
+.panel-table .panel-body {
+    padding:0px;
+}
+.panel-table .panel-body .table-bordered > thead > tr > th{
+    text-align:center;
+}
+.panel-table .panel-footer {
+    height:60px;
+    padding:0px;
+}
+
+
+.status-active{
+    background: green;
+    padding: 5px;
+    color: white;
+    border-radius: 5px;
+}
+
+.status-in-active{
+    background: red;
+    padding: 5px;
+    color: white;
+    border-radius: 5px;
+}
+
+.table td{
+text-align: center;
+    vertical-align: middle;
+}
+
+.user-controls a+a{
+    margin-left: 10px;
+}
+
+.user-controls a{
+   padding: 20px;
+}
+
+.user-controls{
+    margin-top: 5px;
+}
+
+.user-controls span{
+    font-weight: bold;
+}
+
+.user-controls i{
+    font-size: 30px;
+}
+
+.cart-item{
+    background-color: #343a40;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.cart-item .result{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-item{
+    border: 1px solid whitesmoke;
+}
+.cart-item-content span{
+    color:white;
+}
+.bet-info span{
+    line-height: 11px;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: block;
+}
+.bet-info span img{
+    width: 20px;
+    padding-right: 5px;
+}
+.bet-chosen .bet-odds{
+    float:right;
+}
+.bet-chosen span{
+    font-size: 12px;
+}
+.bet-chosen .bet-odds{
+    float:right;
+}
+.cart-item .fa-thumbs-down{
+    font-size: 20px;
+    color: red;
+}
+.cart-item .fa-thumbs-up{
+    font-size: 20px;
+    color: green;
+}
+.table td{
+    padding: 0px;
+}
+
+.settings td a span{
+    width: 100%;
+    color: #0D0A0A;
+    cursor: pointer;
+}
+
+.settings td a{
+    width: 100%;
+    text-align: left;
+}
+
+.settings td{
+    text-align: left;
+}
+
+.settings td:hover{
+    background: deepskyblue;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+
+.status-voided{
+    background: orange;
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+}
+
+.status-pending{
+    border-radius: 5px;
+background: yellow;
+    padding: 5px;
+    color: white;
+}
+
+.status-success{
+    border-radius: 5px;
+    background: green;
+    padding: 5px;
+    color: white;
+}
+
+/*.nav-link{*/
+/*    padding: 3px 1rem ;*/
+/*}*/
+
+.nav-link .nav-icon{
+    font-size: 12px !important;
+}
+
+.nav-link .fa-circle{
+    font-size: 8px !important;
+}
+
+.nav-link .right{
+    font-size: 14px !important;
+}
+
