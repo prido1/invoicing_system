@@ -15,7 +15,6 @@
 <link rel="stylesheet" href="{{asset('assets/admin/css/adminlte.css')}}">
 <!-- overlayScrollbars -->
 <link rel="stylesheet" href="{{asset('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
-<link rel="stylesheet" href="{{asset('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
 <!-- Daterange picker -->
 <link rel="stylesheet" href="{{asset('assets/plugins/daterangepicker/daterangepicker.css')}}">
 <!-- summernote -->
