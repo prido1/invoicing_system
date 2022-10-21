@@ -1,12 +1,8 @@
 @extends('layout')
 
 @section('title', 'Create Invoice')
-@section('invoice-show')
-    menu-open
-@endsection
-@section('create-invoice')
-    active
-@endsection
+@section('invoice-show', 'menu-open')
+@section('create-invoice', 'active')
 
 @section('content')
     <div class="content-wrapper">
@@ -35,7 +31,7 @@
                         @endif
                     </div>
                 </div>
-                <form action="/admin/invoice/save" method="post" enctype="multipart/form-data">
+                <form action="/invoice/save" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-lg-4">
@@ -69,7 +65,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="create-date">Create Date</label>
-                                <div class="input-group date" id="create-date" data-target-input="nearest">
+                                <div class="input-group date" data-target-input="nearest">
                                     <input
                                         @if(isset($invoice)) value="{{\Carbon\Carbon::parse($invoice->create_date)->format('m/d/y')}}" @endif
                                     id="create-date" name="create_date" type="text"
@@ -84,7 +80,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="due-date">Due Date</label>
-                                <div class="input-group date" id="due-date" data-target-input="nearest">
+                                <div class="input-group date" data-target-input="nearest">
                                     <input
                                         @if(isset($invoice)) value="{{\Carbon\Carbon::parse($invoice->due_date)->format('m/d/y')}}" @endif
                                     id="due-date" name="due_date" type="text"
@@ -110,14 +106,21 @@
                                           rows="3"> @if(isset($invoice)) {{$invoice->terms_condition}} @endif</textarea>
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-2">
                             <div class="form-group">
                                 <label for="discount">Discount</label>
                                 <input @if(isset($invoice)) value="{{$invoice->discount}}" @endif id="discount"
                                        name="discount" class="form-control" value="0" placeholder="Discount">
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="discount">Vat %</label>
+                                <input @if(isset($invoice)) value="{{$invoice->vat}}" @endif id="vat"
+                                       name="vat" class="form-control" value="0" placeholder="Vat in %">
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
                             <div class="form-group">
                                 <label for="payment_currency">Payment Currency</label>
                                 <select class="form-control" id="payment_currency" name="payment_currency">
@@ -166,7 +169,7 @@
                                                placeholder="Unit Price">
                                     </div>
                                     <div class="col-lg-2">
-                                        <input class="form-control" placeholder="Total Price" disabled>
+                                        <input class="form-control total_price" placeholder="Total Price" disabled>
                                     </div>
                                 </div>
                             @endif
@@ -186,7 +189,7 @@
                                                    placeholder="Unit Price">
                                         </div>
                                         <div class="col-lg-2">
-                                            <input class="form-control" placeholder="Total Price" disabled>
+                                            <input class="form-control total_price" placeholder="Total Price" disabled>
                                         </div>
                                         <button class="btn btn-danger remove_btn"><i class="fa fa-trash"></i></button>
                                     </div>
@@ -210,6 +213,14 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6">
+                                            <span>Vat %</span>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <input @if(isset($invoice)) value="{{$invoice->vat}}" @endif id="vat_total" disabled class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
                                             <span>Discount</span>
                                         </div>
                                         <div class="col-lg-6">
@@ -221,7 +232,7 @@
                                             <span>Grand Total</span>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input @if(isset($invoice)) value="{{$total_price - $invoice->discount}}" @endif id="grand_total" disabled class="form-control">
+                                            <input @if(isset($invoice)) value="{{($invoice->vat / 100 + 1) * ($total_price - $invoice->discount)}}" @endif id="grand_total" disabled class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -230,8 +241,7 @@
                         <div class="col-lg-12">
                             <div class="row">
                                 <div class="col-lg-2">
-                                    <input type="button" class="btn btn-success" value="Save">
-                                    <input type="submit" class="btn btn-primary" value="Save Send">
+                                    <input type="submit" class="btn btn-success" value="Save Invoice">
                                 </div>
                             </div>
                         </div>
@@ -245,7 +255,7 @@
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form action="/admin/client/save" method="post" enctype="multipart/form-data">
+                <form action="/client/save" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-header">
                         <h5>Create User</h5>
@@ -315,7 +325,7 @@
                     '                            <input name="unit_price[]" class="form-control unit_price" placeholder="Unit Price">\n' +
                     '                        </div>\n' +
                     '                        <div class="col-lg-2">\n' +
-                    '                            <input class="form-control" placeholder="Total Price" disabled>\n' +
+                    '                            <input class="form-control total_price" placeholder="Total Price" disabled>\n' +
                     '                        </div>\n' +
                     '                            <button class="btn btn-danger remove_btn"><i class="fa fa-trash"></i></button>\n' +
                     '                    </div>');
@@ -329,6 +339,9 @@
             })
 
             $(wrapper).on('keyup', '.quantity', function () {
+                calculate();
+            });
+            $(document).on('keyup', '#vat', function () {
                 calculate();
             });
             $(wrapper).on('keyup', '.unit_price', function () {
@@ -346,26 +359,38 @@
                     var wrap = $('#items_row_' + i);
                     var quantity = wrap.find('.quantity');
                     var unit_price = wrap.find('.unit_price');
+                    var total_price = wrap.find('.total_price');
                     total = total + (quantity.val() * unit_price.val())
                     grand_total = total - discount;
+                    total_price.val(quantity.val() * unit_price.val())
                 }
+                let vat = $('#vat');
+                let vat_total = $('#vat_total');
+                vat_total.val(vat.val());
+
                 discount_f.val(discount);
                 total_f.val(total);
+                grand_total = (vat.val() / 100 + 1) * grand_total;
+                grand_total = Math.round(grand_total * 100) / 100;
                 grand_total_f.val(grand_total);
             }
         })
-
+ 
 
         //Date range picker
-        $('#create-date').datetimepicker({
-            allowInputToggle: true,
-            format: 'L'
+        $('#create-date').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            autoUpdateInput: true,
+            startDate: moment().subtract(6, 'days')
         });
 
         //Date range picker
-        $('#due-date').datetimepicker({
-            allowInputToggle: true,
-            format: 'L'
+        $('#due-date').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            autoUpdateInput: true,
+            startDate: moment().subtract(6, 'days')
         });
     </script>
 @endpush

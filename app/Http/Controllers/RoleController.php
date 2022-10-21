@@ -49,7 +49,7 @@ class RoleController extends Controller
         Role::create([
             'name' => $request->name
         ]);
-        return redirect()->route('admin.role.index');
+        return redirect()->route('role.index');
     }
 
     /**
@@ -89,7 +89,7 @@ class RoleController extends Controller
         $role->update([
             'name' => $request->name
         ]);
-        return redirect()->route('admin.role.index');
+        return redirect()->route('role.index');
     }
 
     /**
@@ -102,6 +102,6 @@ class RoleController extends Controller
             return response()->json(['message'=>'not authorized'], 403);
         }
         $role->delete();
-        return redirect()->route('admin.role.index');
+        return redirect()->route('role.index');
     }
 }

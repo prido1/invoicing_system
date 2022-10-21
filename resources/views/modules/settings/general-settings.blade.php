@@ -1,12 +1,8 @@
-@extends('layout')
+@extends('layout') 
 
-@section('title', 'Dashboard')
-@section('settings-show')
-    menu-open
-@endsection
-@section('general-settings')
-    active
-@endsection
+@section('title', 'General Settings')
+@section('settings-show', 'menu-open')
+@section('general-settings', 'active')
 
 @section('content')
 
@@ -52,9 +48,9 @@
 
                             <div class="row">
                                 <div class="col-md-8">
-                                    <form action="/admin/settings/general/store" method="post" enctype="multipart/form-data">
+                                    <form action="/settings/system/store" method="post" enctype="multipart/form-data">
                                         @csrf
-                                        <div class="row">
+                                        <div class="row"> 
                                             <div class="col-md-6 form-group">
                                                 <label for="app_name">App Name</label>
                                                 <input value="{{isset($settings['app_name']) ? $settings['app_name'] : ''}}" type="text" class="form-control" name="app_name" id="app_name"
@@ -71,19 +67,31 @@
                                                        placeholder="Input the app url">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="client_url">Client Url</label>
-                                                <input value="{{isset($settings['client_url']) ? $settings['client_url'] : ''}}" type="url" class="form-control" name="client_url" id="client_url"
-                                                       placeholder="Input the client url">
-                                            </div>
-                                            <div class="col-md-6 form-group">
                                                 <label for="app_phone">App Phone</label>
                                                 <input value="{{isset($settings['app_phone']) ? $settings['app_phone'] : ''}}" type="tel" class="form-control" name="app_phone" id="app_phone"
                                                        placeholder="Input the app phone">
+                                            </div>
+                                            <div class="col-md-12 form-group">
+                                                <label for="app_phone">App Moto</label>
+                                                <input value="{{isset($settings['app_moto']) ? $settings['app_moto'] : ''}}" type="text" class="form-control" name="app_moto" id="app_moto"
+                                                       placeholder="Input the app moto">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="app_address">Address</label>
                                                 <input value="{{isset($settings['app_address']) ? $settings['app_address'] : ''}}" type="text" class="form-control" name="app_address" id="app_address"
                                                        placeholder="Input the company address">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="file">System Logo</label>
+                                                <input type="file" class="form-control" id="file" name="logo">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="file">System Letter Head</label>
+                                                <input type="file" class="form-control" id="file" name="letter_head">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="file">System Icon</label>
+                                                <input type="file" class="form-control" id="file" name="icon">
                                             </div>
 
                                             <div class="col-md-12">

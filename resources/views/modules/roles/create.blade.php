@@ -1,12 +1,8 @@
 @extends('layout')
 
-@section('title', 'Dashboard')
-@section('staff-show')
-    menu-open
-@endsection
-@section('roles')
-    active
-@endsection
+@section('title', 'Create Roles & Permisions')
+@section('staff-show', 'menu-open')
+@section('roles', 'active')
 
 @section('content')
     <div class="content-wrapper">
@@ -14,7 +10,7 @@
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-6">
                     <h4>Add New Role</h4>
-                    <form action="{{route('admin.role.store')}}" method="post" enctype="multipart/form-data">
+                    <form action="{{route('role.store')}}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="name">Name</label>

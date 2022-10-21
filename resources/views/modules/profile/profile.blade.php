@@ -1,12 +1,8 @@
 @extends('layout')
 
-@section('title', 'Dashboard')
-@section('profile-show')
-    menu-open
-@endsection
-@section('update-profile')
-    active
-@endsection
+@section('title', 'Profile')
+@section('profile-show', 'menu-open')
+@section('update-profile', 'active')
 
 @section('content')
     <div class="content-wrapper">
@@ -35,7 +31,7 @@
                         @endif
                     <div class="row">
                         <div class="col-lg-12">
-                            <form action="/admin/profile/update" enctype="multipart/form-data" method="post">
+                            <form action="/profile/update" enctype="multipart/form-data" method="post">
                                 @csrf
                                 <div class="row">
                                     <div class="form-group col-lg-6 ">
@@ -57,7 +53,7 @@
                                         <input class="form-control" id="phone" name="phone" value="{{$user->phone}}" placeholder="user phone">
                                         @error('phone')
                                         <span class="text-danger">{{$message}}</span>
-                                        @enderror
+                                        @enderror 
                                     </div>
                                     <div class="form-group col-lg-6 ">
                                         <label for="password">Password</label>

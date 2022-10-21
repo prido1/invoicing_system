@@ -1,12 +1,8 @@
 @extends('layout')
 
-@section('title', 'Create Quotation')
-@section('quotation-show')
-    menu-open
-@endsection
-@section('edit-quotation')
-    active
-@endsection
+@section('title', 'Edit Quotation')
+@section('quotation-show', 'menu-open')
+@section('edit-quotation', 'active')
 
 @section('content')
     <div class="content-wrapper">
@@ -35,7 +31,7 @@
                         @endif
                     </div>
                 </div>
-                <form action="/admin/quotation/update/{{$quotation->id}}" method="post" enctype="multipart/form-data">
+                <form action="/quotation/update/{{$quotation->id}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-lg-4">
@@ -95,14 +91,22 @@
                                           rows="3"> @if(isset($quotation)) {{$quotation->terms_condition}} @endif</textarea>
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                      
+                        <div class="col-lg-2">
                             <div class="form-group">
                                 <label for="discount">Discount</label>
                                 <input @if(isset($quotation)) value="{{$quotation->discount}}" @endif id="discount"
                                        name="discount" class="form-control" value="0" placeholder="Discount">
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="discount">Vat%</label>
+                                <input @if(isset($quotation)) value="{{$quotation->discount}}" @endif id="vat"
+                                       name="vat" class="form-control" value="0" placeholder="Vat %">
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
                             <div class="form-group">
                                 <label for="payment_currency">Payment Currency</label>
                                 <select class="form-control" id="payment_currency" name="payment_currency">
@@ -163,6 +167,14 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6">
+                                            <span>Vat</span>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <input @if(isset($quotation)) value="{{$quotation->vat}}" @endif id="vat_total" disabled class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
                                             <span>Discount</span>
                                         </div>
                                         <div class="col-lg-6">
@@ -183,8 +195,7 @@
                         <div class="col-lg-12">
                             <div class="row">
                                 <div class="col-lg-2">
-                                    <input type="button" class="btn btn-success" value="Save">
-                                    <input type="submit" class="btn btn-primary" value="Save Send">
+                                    <input type="submit" class="btn btn-success" value="Update Quotation">
                                 </div>
                             </div>
                         </div>
@@ -198,7 +209,7 @@
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form action="/admin/client/save" method="post" enctype="multipart/form-data">
+                <form action="/client/save" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-header">
                         <h5>Create User</h5>
@@ -284,6 +295,9 @@
             $(wrapper).on('keyup', '.quantity', function () {
                 calculate();
             });
+            $(document).on('keyup', '#vat', function () {
+                calculate();
+            });
             $(wrapper).on('keyup', '.unit_price', function () {
                 calculate();
             });
@@ -302,8 +316,14 @@
                     total = total + (quantity.val() * unit_price.val())
                     grand_total = total - discount;
                 }
+                let vat = $('#vat');
+                let vat_total = $('#vat_total');
+                vat_total.val(vat.val());
+
                 discount_f.val(discount);
                 total_f.val(total);
+                grand_total = (vat.val() / 100 + 1) * grand_total;
+                grand_total = Math.round(grand_total * 100) / 100;
                 grand_total_f.val(grand_total);
             }
         })

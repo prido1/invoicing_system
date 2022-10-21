@@ -1,12 +1,8 @@
 @extends('layout')
 
-@section('title', 'Dashboard')
-@section('users-show')
-    menu-open
-@endsection
-@section('roles')
-    active
-@endsection
+@section('title', 'Edit Roles & Permisions')
+@section('users-show', 'menu-open')
+@section('roles', 'active')
 
 @section('content')
     <div class="content-wrapper">
@@ -14,7 +10,7 @@
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-6 mt-5">
                     <h4>Edit Role</h4>
-                    <form action="{{route('admin.role.update', $role->id)}}" method="post" enctype="multipart/form-data">
+                    <form action="{{route('role.update', $role->id)}}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="form-group">

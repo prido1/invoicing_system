@@ -52,7 +52,7 @@
                         <td>ID{{$template->id}}</td>
                         <td>ID{{$template->subject}}</td>
                         <td>
-                            <a href="/admin/etemplate/edit/{{$template->id}}" class="btn btn-primary" title="Edit Template"><i class="fa fa-pen"></i></a>
+                            <a href="/etemplate/edit/{{$template->id}}" class="btn btn-primary" title="Edit Template"><i class="fa fa-pen"></i></a>
                     </tr>
 
                     </tr>

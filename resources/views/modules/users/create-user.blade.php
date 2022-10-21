@@ -1,12 +1,8 @@
 @extends('layout')
 
-@section('title', 'Dashboard')
-@section('users-show')
-    menu-open
-@endsection
-@section('create-user')
-    active
-@endsection
+@section('title', 'Create User')
+@section('users-show', 'menu-open')
+@section('create-user', 'active')
 
 @section('content')
     <div class="content-wrapper">
@@ -16,7 +12,7 @@
                 <div class="col-lg-12 p-3">
                     <div class="row">
                         <div class="col-lg-6">
-                            <form action="/admin/user/save" enctype="multipart/form-data" method="post">
+                            <form action="/user/save" enctype="multipart/form-data" method="post">
                                 @csrf
                                 <div class="form-group">
                                     <label for="name">Name</label>

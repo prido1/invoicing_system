@@ -126,7 +126,7 @@ $subject = $template->subject;
             'body' => $request->body,
         ]);
 
-        return redirect('admin/etemplate')->with(['success' => 'template created successfully']);
+        return redirect('etemplate')->with(['success' => 'template created successfully']);
     }
 
     public function edit($id){

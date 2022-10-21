@@ -51,7 +51,7 @@ class ExpenseController extends Controller
         }
 
         $expense->save();
-        return redirect('admin/expense')->with(['success' => 'client created successfully']);
+        return redirect('expense')->with(['success' => 'client created successfully']);
     }
 
     public function destroy(){

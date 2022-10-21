@@ -1,19 +1,15 @@
 @extends('layout')
 
-@section('title', 'List Quotation')
-@section('quotation-show')
-    menu-open
-@endsection
-@section('list-quotation')
-    active
-@endsection
+@section('title', 'List Quotations')
+@section('quotation-show', 'menu-open')
+@section('list-quotation', 'active')
 
 @section('content')
     <div class="content-wrapper">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 mb-3">
-                    <form action="/admin/quotation/search" method="get" enctype="multipart/form-data">
+                    <form action="/quotation/search" method="get" enctype="multipart/form-data">
                         @csrf
                         <div class="input-group">
                             <input name="search_term" type="text" class="form-control" placeholder="Seach by client name, email or company name">
@@ -26,7 +22,7 @@
                     </form>
                 </div>
                 <div class="col-lg-3">
-                    <a href="/admin/quotation " class="btn btn-primary">All</a>
+                    <a href="/quotation " class="btn btn-primary">All</a>
                 </div>
             </div>
             <table class="table table-striped table-bordered table-list">
@@ -47,9 +43,9 @@
                         <td>{{$quotation->client->company_name}}</td>
                         <td>{{\Carbon\Carbon::parse($quotation->create_date)->format('M d Y ')}}</td>
                         <td>
-                            <a href="/admin/quotation/view/{{$quotation->id}}" class="btn btn-info" title="View invoice"><i class="fa fa-eye"></i></a>
-                            <a href="/admin/quotation/edit/{{$quotation->id}}" class="btn btn-primary" title="Edit invoice"><i class="fa fa-pen"></i></a>
-                            <a href="/admin/quotation/copy/{{$quotation->id}}" class="btn btn-success" title="Copy invoice"><i class="fa fa-copy"></i></a>
+                            <a href="/quotation/view/{{$quotation->id}}" class="btn btn-info" title="View invoice"><i class="fa fa-eye"></i></a>
+                            <a href="/quotation/edit/{{$quotation->id}}" class="btn btn-primary" title="Edit invoice"><i class="fa fa-pen"></i></a>
+                            <a href="/quotation/copy/{{$quotation->id}}" class="btn btn-success" title="Copy invoice"><i class="fa fa-copy"></i></a>
                     </tr>
 
                     </tr>

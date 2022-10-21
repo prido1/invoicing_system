@@ -1,12 +1,8 @@
 @extends('layout')
 
-@section('title', 'Dashboard')
-@section('staff-show')
-    menu-open
-@endsection
-@section('permissions')
-    active
-@endsection
+@section('title', 'Edit Permission')
+@section('staff-show', 'menu-open')
+@section('permissions', 'active')
 
 @section('content')
     <div class="content-wrapper">
@@ -14,7 +10,7 @@
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-10 mt-5">
                     <h4>update Permissions</h4>
-                    <form action="{{route('admin.permission.update', $permission->id)}}" method="post"
+                    <form action="{{route('permission.update', $permission->id)}}" method="post"
                           enctype="multipart/form-data">
                         @csrf
                         @method('PUT')

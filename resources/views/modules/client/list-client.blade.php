@@ -17,7 +17,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-3 mb-3">
-                    <form action="/admin/client/search" method="get" enctype="multipart/form-data">
+                    <form action="/client/search" method="get" enctype="multipart/form-data">
                         @csrf
                         <div class="input-group">
                             <input name="term" type="text" class="form-control" placeholder="Seach by name, email or company name">
@@ -30,7 +30,7 @@
                     </form>
                 </div>
                 <div class="col-lg-3">
-                    <a href="/admin/client " class="btn btn-primary">All</a>
+                    <a href="/client " class="btn btn-primary">All</a>
                 </div>
             </div>
             <table class="table table-striped table-bordered table-list">
@@ -51,7 +51,7 @@
                         <td>{{$client->company_name}}</td>
                         <td>{{$client->email}}</td>
                         <td>
-                            <a href="/admin/client/edit/{{$client->id}}" class="btn btn-primary" title="Edit invoice"><i class="fa fa-pen"></i></a>
+                            <a href="/client/edit/{{$client->id}}" class="btn btn-primary" title="Edit invoice"><i class="fa fa-pen"></i></a>
                     </tr>
 
                     </tr>

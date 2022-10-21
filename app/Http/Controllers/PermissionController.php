@@ -52,7 +52,7 @@ class PermissionController extends Controller
             'role_id' => $request->role_id,
             'permission' => $request->permission
         ]);
-        return redirect()->route('admin.permission.index');
+        return redirect()->route('permission.index');
     }
 
     /**
@@ -94,7 +94,7 @@ class PermissionController extends Controller
             'role_id' => $request->role_id,
             'permission' => $request->permission
         ]);
-        return redirect()->route('admin.permission.index');
+        return redirect()->route('permission.index');
     }
 
     /**
@@ -107,6 +107,6 @@ class PermissionController extends Controller
             return response()->json(['message'=>'not authorized'], 403);
         }
         $permission->delete();
-        return redirect()->route('admin.permission.index');
+        return redirect()->route('permission.index');
     }
 }

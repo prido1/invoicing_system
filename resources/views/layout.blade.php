@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" href="{{asset('assets\images\favicon.png')}}">
     <link rel="icon" type="image/png" href="{{asset('assets\images\favicon.png')}}">
     <link rel="icon" type="image/png" href="{{asset('assets\images\favicon.png')}}">
-    <title>@yield('title')</title>
+    <title>@yield('title') | {{$global_settings['app_name'] ?? ''}}</title>
     @include('partials/styles')
 
 </head>

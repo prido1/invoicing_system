@@ -15,10 +15,10 @@ class Users extends Seeder
     public function run()
     {
         User::create([
-            'email' => 'info@chiminyalogistics.co.zw',
+            'email' => 'admin@gmail.com',
             'status' => true,
             'role_id' => 1,
-            'password' => bcrypt('chiminya@2021')
+            'password' => bcrypt('admin@_123')
         ]);
     }
 }

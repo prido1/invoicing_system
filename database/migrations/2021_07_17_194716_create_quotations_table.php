@@ -19,10 +19,11 @@ class CreateQuotationsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('payment_type');
             $table->unsignedBigInteger('payment_currency');
-            $table->integer('discount');
+            $table->integer('discount')->nullable();
+            $table->integer('vat')->nullable();
             $table->date('create_date');
-            $table->longText('note');
-            $table->longText('terms_condition');
+            $table->longText('note')->nullable();;
+            $table->longText('terms_condition')->nullable();;
             $table->timestamps();
         });
     }

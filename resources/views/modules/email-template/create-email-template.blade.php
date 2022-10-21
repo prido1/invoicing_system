@@ -37,7 +37,7 @@
                     @endif
                 </div>
             </div>
-            <form action="/admin/etemplate/save" method="post" enctype="multipart/form-data">
+            <form action="/etemplate/save" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-lg-6">

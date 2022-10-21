@@ -2,7 +2,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/admin" class="m-auto brand-link">
-        <img src="{{asset('logo.png')}}" alt="chiminya logo" class=" elevation-3"
+        <img src="{{asset($global_settings['logo'] ?? '')}}" alt="{{$global_settings['app_name'] ?? ''}}" class=" elevation-3"
              style="opacity: .8;width: 108px">
     </a>
 
@@ -23,7 +23,7 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
                 <li class="nav-item @yield('dashboard-open')">
-                    <a href="/admin/dashboard" class="nav-link @yield('dashboard')">
+                    <a href="/dashboard" class="nav-link @yield('dashboard')">
                         <i class="fas fa-tachometer-alt nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
@@ -42,7 +42,7 @@
                     <ul class="nav nav-treeview">
                         @can('list', 'client')
                             <li class="nav-item">
-                                <a href="/admin/client/" class="nav-link @yield('list-clients')">
+                                <a href="/client/" class="nav-link @yield('list-clients')">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>All Clients</p>
                                 </a>
@@ -50,7 +50,7 @@
                         @endcan
                         @can('create', 'client')
                             <li class="nav-item">
-                                <a href="/admin/client/create" class="nav-link @yield('create-clients')">
+                                <a href="/client/create" class="nav-link @yield('create-clients')">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Add New</p>
                                 </a>
@@ -74,7 +74,7 @@
                     <ul class="nav nav-treeview">
                         @can('list', 'invoice')
                             <li class="nav-item">
-                                <a href="/admin/invoice" class="nav-link @yield('list-invoice')">
+                                <a href="/invoice" class="nav-link @yield('list-invoice')">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>All Invoices</p>
                                 </a>
@@ -82,7 +82,7 @@
                         @endcan
                             @can('create', 'invoice')
                         <li class="nav-item">
-                            <a href="/admin/invoice/create" class="nav-link @yield('create-invoice')">
+                            <a href="/invoice/create" class="nav-link @yield('create-invoice')">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Add New</p>
                             </a>
@@ -105,7 +105,7 @@
                     <ul class="nav nav-treeview">
                      @can('list', 'quotation')
                             <li class="nav-item">
-                                <a href="/admin/quotation" class="nav-link @yield('list-quotation')">
+                                <a href="/quotation" class="nav-link @yield('list-quotation')">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>All Quotations</p>
                                 </a>
@@ -113,7 +113,7 @@
                         @endcan
                        @can('create', 'quotation')
                              <li class="nav-item">
-                                 <a href="/admin/quotation/create" class="nav-link @yield('create-quotation')">
+                                 <a href="/quotation/create" class="nav-link @yield('create-quotation')">
                                      <i class="far fa-circle nav-icon"></i>
                                      <p>Add New</p>
                                  </a>
@@ -137,7 +137,7 @@
                     <ul class="nav nav-treeview">
                        @can('list', 'expense')
                             <li class="nav-item">
-                                <a href="/admin/expense" class="nav-link @yield('list-expense')">
+                                <a href="/expense" class="nav-link @yield('list-expense')">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>All Expenses</p>
                                 </a>
@@ -145,7 +145,7 @@
                         @endcan
                            @can('create', 'expense')
                         <li class="nav-item">
-                            <a href="/admin/expense/create" class="nav-link @yield('create-expense')">
+                            <a href="/expense/create" class="nav-link @yield('create-expense')">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Add New</p>
                             </a>
@@ -169,7 +169,7 @@
                     <ul class="nav nav-treeview">
                         @can('list', 'email_template')
                         <li class="nav-item">
-                            <a href="/admin/etemplate" class="nav-link @yield('list-etemplate')">
+                            <a href="/etemplate" class="nav-link @yield('list-etemplate')">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>All Templates</p>
                             </a>
@@ -177,7 +177,7 @@
                         @endcan
                             @can('create', 'email_template')
                         <li class="nav-item">
-                            <a href="/admin/etemplate/create" class="nav-link @yield('create-etemplate')">
+                            <a href="/etemplate/create" class="nav-link @yield('create-etemplate')">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Add New</p>
                             </a>
@@ -201,7 +201,7 @@
                     <ul class="nav nav-treeview">
                         @can('list', 'user')
                         <li class="nav-item">
-                            <a href="/admin/user/" class="nav-link @yield('list-user')">
+                            <a href="/user/" class="nav-link @yield('list-user')">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>All Users</p>
                             </a>
@@ -209,7 +209,7 @@
                         @endcan
                             @can('create', 'user')
                         <li class="nav-item">
-                            <a href="/admin/user/create" class="nav-link @yield('create-user')">
+                            <a href="/user/create" class="nav-link @yield('create-user')">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Add New</p>
                             </a>
@@ -217,7 +217,7 @@
                             @endcan
                             @can('list', 'role')
                         <li class="nav-item">
-                            <a href="{{route('admin.role.index')}}" class="nav-link @yield('roles')">
+                            <a href="{{route('role.index')}}" class="nav-link @yield('roles')">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Roles</p>
                             </a>
@@ -225,7 +225,7 @@
                             @endcan
                             @can('list', 'permission')
                         <li class="nav-item">
-                            <a href="{{route('admin.permission.index')}}" class="nav-link @yield('permissions')">
+                            <a href="{{route('permission.index')}}" class="nav-link @yield('permissions')">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Permissions</p>
                             </a>
@@ -248,13 +248,25 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="/admin/settings/smtp" class="nav-link @yield('smtp-settings')">
+                            <a href="/settings/system" class="nav-link @yield('general-settings')">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>System Settings</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/settings/smtp" class="nav-link @yield('smtp-settings')">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>SMTP Settings</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/admin/settings/email" class="nav-link @yield('email-settings')">
+                            <a href="/settings/imap" class="nav-link @yield('imap-settings')">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>IMAP Settings</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/settings/email" class="nav-link @yield('email-settings')">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Email Settings</p>
                             </a>
@@ -265,7 +277,7 @@
                 @endcan
 
                 <li class="nav-item">
-                    <a href="/admin/profile" class="nav-link @yield('update-profile')">
+                    <a href="/profile" class="nav-link @yield('update-profile')">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
                             Profile

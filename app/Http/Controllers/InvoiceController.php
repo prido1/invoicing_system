@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\SendEmailHelper;
 use App\Models\Client;
 use App\Models\EmailTemplate;
 use App\Models\Invoice;
@@ -10,13 +11,13 @@ use App\Models\InvoiceItem;
 use App\Models\PaymentCurrency;
 use App\Models\PaymentStatus;
 use App\Models\PaymentType;
+use App\Models\Settings;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Mail;
 
 class InvoiceController extends Controller
 {
@@ -26,7 +27,7 @@ class InvoiceController extends Controller
         if (!Gate::allows('list', 'invoice')) {
             return response()->json(['message' => 'not authorized'], 403);
         }
-        $invoices = Invoice::paginate(15);
+        $invoices = Invoice::has('client')->paginate(15);
         return view('modules.invoice.list-invoice')->with(['invoices' => $invoices]);
     }
 
@@ -37,7 +38,7 @@ class InvoiceController extends Controller
             return response()->json(['message' => 'not authorized'], 403);
         }
         $request->validate([
-            'search_term' => 'required'
+            'search_term' => 'required',
         ]);
 
         $invoices = Invoice::with('client')
@@ -55,10 +56,10 @@ class InvoiceController extends Controller
         if (!Gate::allows('read', 'invoice')) {
             return response()->json(['message' => 'not authorized'], 403);
         }
+        $settings = Settings::where('type', 'system')->pluck('description', 'label');
         //to be removed
         $due = Carbon::createFromDate('2021', '09', '13');
         $left = Carbon::now()->diffInDays($due);
-
 
         $invoice = Invoice::find($id);
         $templates = EmailTemplate::all();
@@ -66,7 +67,7 @@ class InvoiceController extends Controller
         foreach ($invoice->items as $item) {
             $total = $total + ($item->quantity * $item->unit_price);
         }
-        return view('modules.invoice.view-invoice')->with(['left'=>$left, 'templates' => $templates, 'invoice' => $invoice, 'total_price' => $total]);
+        return view('modules.invoice.view-invoice')->with(['left' => $left, 'templates' => $templates, 'invoice' => $invoice, 'total_price' => $total, 'settings' => $settings]);
     }
 
     //create invoice
@@ -109,7 +110,7 @@ class InvoiceController extends Controller
             'payment_status' => $payment_status,
             'payment_currency' => $payment_currency,
             'invoice' => $invoice,
-            'total_price' => $total
+            'total_price' => $total,
         ]);
     }
 
@@ -139,7 +140,8 @@ class InvoiceController extends Controller
             'payment_status' => $request->payment_status,
             'payment_currency' => $request->payment_currency,
             'discount' => $request->discount,
-            'terms_condition' => $request->terms_conditions
+            'terms_condition' => $request->terms_conditions,
+            'vat' => $request->vat
         ]);
 
         foreach ($request->quantity as $key => $value) {
@@ -147,11 +149,11 @@ class InvoiceController extends Controller
                 'invoice_id' => $invoice->id,
                 'quantity' => $request->quantity[$key],
                 'description' => $request->description[$key],
-                'unit_price' => $request->unit_price[$key]
+                'unit_price' => $request->unit_price[$key],
             ]);
         }
 
-        return redirect('admin/invoice/view/' . $invoice->id);
+        return redirect('invoice/view/' . $invoice->id);
 
     }
 
@@ -176,7 +178,7 @@ class InvoiceController extends Controller
             'payment_status' => $payment_status,
             'payment_currency' => $payment_currency,
             'invoice' => $invoice,
-            'total_price' => $total
+            'total_price' => $total,
         ]);
     }
 
@@ -207,6 +209,7 @@ class InvoiceController extends Controller
         $invoice->payment_currency = $request->payment_currency;
         $invoice->discount = $request->discount;
         $invoice->terms_condition = $request->terms_conditions;
+        $invoice->vat = $request->vat;
         $invoice->update();
 
         $items = InvoiceItem::where('invoice_id', $invoice->id);
@@ -217,11 +220,11 @@ class InvoiceController extends Controller
                 'invoice_id' => $invoice->id,
                 'quantity' => $request->quantity[$key],
                 'description' => $request->description[$key],
-                'unit_price' => $request->unit_price[$key]
+                'unit_price' => $request->unit_price[$key],
             ]);
         }
 
-        return redirect('admin/invoice/view/' . $invoice->id);
+        return redirect('invoice/view/' . $invoice->id);
     }
 
     //destroy
@@ -243,7 +246,9 @@ class InvoiceController extends Controller
             'body' => 'required',
         ]);
         $invoice = Invoice::find($request->invoice_id);
-        if (!$invoice) return redirect()->back()->with(['error' => 'Invoice not found']);
+        if (!$invoice) {
+            return redirect()->back()->with(['error' => 'Invoice not found']);
+        }
 
         if ($request->has('schedule')) {
             $invoice->email_subject = $request->subject;
@@ -259,27 +264,20 @@ class InvoiceController extends Controller
             $invoice->is_schedule_sent = false;
             $invoice->update();
         }
-        $attachedFileName = '';
+        $attachment = null;
         $title = "<h2>$request->subject</h2>";
         $content = "<p>$request->body</p>";
         if ($request->has('attach')) {
-            $attachedFileName = $this->storeInvoice($invoice);
+            $attachment = $this->storeInvoice($invoice);
         }
 
         try {
-            Mail::send('emails.send', ['title' => $title, 'content' => $content], function ($message) use ($request, $attachedFileName, $invoice) {
-               $email = str_replace(' ', '', $invoice->client->email);
-                $receipients = explode(',', $email);
-                $message->to($receipients);
-                $message->subject($request->subject);
-                if ($attachedFileName != "") {
-                    $message->attach($attachedFileName, ['mime' => 'pdf']);
-                }
-            });
-        } catch (\Exception $e) {
-            $this->createEmailHistory($invoice->client_id, false, now());
+            SendEmailHelper::sendEmail($invoice->client->email, $request->subject, $title, $content, $attachment);
+
+        } catch (\Exception$e) {
             return redirect()->back()->with(['error' => $e->getMessage()]);
         }
+
         $this->createEmailHistory($invoice->client_id, true, now());
         return redirect()->back()->with(['success' => 'invoice sent successfully']);
     }
@@ -289,7 +287,7 @@ class InvoiceController extends Controller
         InvoiceEmail::create([
             'client_id' => $client_id,
             'sent' => $status,
-            'sent_at' => $time
+            'sent_at' => $time,
         ]);
         return true;
     }
@@ -300,16 +298,19 @@ class InvoiceController extends Controller
         foreach ($invoice->items as $item) {
             $total_price = $total_price + ($item->quantity * $item->unit_price);
         }
+        $total_price = $total_price * ($invoice->vat / 100 + 1);
+        $settings = Settings::where('type', 'system')->pluck('description', 'label');
         try {
-            $pdf = PDF::loadView('modules.invoice.pdf', compact('invoice', 'total_price'));
-            $invoicePath = 'assets/pdf' . '/' . date('Y-m-d-H-i-s') . "-invoice-" . $invoice->id . '.pdf';
+            $file_name = date('Y-m-d-H-i-s') . "-invoice-" . $invoice->id . '.pdf';
+            $pdf = PDF::loadView('modules.invoice.pdf', compact('invoice', 'total_price', 'settings'));
+            $invoicePath = 'assets/pdf' . '/' . $file_name;
             $pdf->save($invoicePath);
 
-        } catch (\Exception $e) {
+        } catch (\Exception$e) {
             return redirect()->back()->with(['error' => $e->getMessage()]);
         }
 
-        return $invoicePath;
+        return (object) ['filename' => $file_name, 'path' => $invoicePath];
     }
 
     public function printInvoice($id)
@@ -319,6 +320,7 @@ class InvoiceController extends Controller
         foreach ($invoice->items as $item) {
             $total_price = $total_price + ($item->quantity * $item->unit_price);
         }
+        $total_price = $total_price * ($invoice->vat / 100 + 1);
         $pdf = PDF::loadView('modules.invoice.pdf', compact('invoice', 'total_price'));
         $invoicePath = 'assets/pdf' . '/-invoice-' . $invoice->id . '.pdf';
         if ($pdf->save($invoicePath)) {
@@ -331,33 +333,31 @@ class InvoiceController extends Controller
     public function sendFromCron($invoice, $cause = null)
     {
 
-        $attachedFileName = '';
-        $title = "<h2>$invoice->subject</h2>";
-        $content = "<p>$invoice->body</p>";
+        $attachment = null;
+        $title = "<h2>" . $invoice->subject . "</h2>";
+        $content = "<p>" . $invoice->body . "</p>";
         if ($invoice->attach === true) {
-            $attachedFileName = $this->storeInvoice($invoice);
+            $attachment = $this->storeInvoice($invoice);
         }
 
         try {
-            Mail::send('emails.send', ['title' => $title, 'content' => $content], function ($message) use ($attachedFileName, $invoice) {
-                $email = str_replace(' ', '', $invoice->client->email);
-                $receipients = explode(',', $email);
-                $message->to($receipients);
-                $message->subject($invoice->subject);
-                if ($attachedFileName != "") {
-                    $message->attach($attachedFileName, ['mime' => 'pdf']);
-                }
-            });
-        } catch (\Exception $e) {
-            $this->createEmailHistory($invoice->client_id, false, Carbon::now());
+            SendEmailHelper::sendEmail($invoice->client->email, $invoice->subject, $title, $content, $attachment);
+
+        } catch (\Exception$e) {
             return false;
         }
+
         if ($cause == 'schedule') {
             $invoice->is_schedule_sent = true;
             $invoice->update();
         }
 
-        $this->createEmailHistory($invoice->client_id, true, Carbon::now());
+        // $this->createEmailHistory($invoice->client_id, true, Carbon::now());
         return true;
+    }
+
+    public function listSent()
+    {
+
     }
 }

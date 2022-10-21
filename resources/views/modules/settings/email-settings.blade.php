@@ -1,12 +1,8 @@
 @extends('layout')
 
-@section('title', 'Dashboard')
-@section('settings-show')
-    menu-open
-@endsection
-@section('email-settings')
-    active
-@endsection
+@section('title', 'Email Settings')
+@section('settings-show', 'menu-open')
+@section('email-settings', 'active')
 
 @section('content')
 
@@ -52,7 +48,7 @@
 
                             <div class="row">
                                 <div class="col-md-8">
-                                    <form action="/admin/settings/email" method="post" enctype="multipart/form-data">
+                                    <form action="/settings/email" method="post" enctype="multipart/form-data">
                                         @csrf
                                         <div class="row">
                                             <div class="col-md-12">Bank</div>

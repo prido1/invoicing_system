@@ -1,9 +1,7 @@
 @extends('layout')
 
-@section('title', 'Dashboard')
-@section('users-show')
-    menu-open
-@endsection
+@section('title', 'Edit User')
+@section('users-show', 'menu-open')
 
 @section('content')
     <div class="content-wrapper">
@@ -38,7 +36,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
-                            <form action="/admin/user/update/{{$user->id}}" enctype="multipart/form-data" method="post">
+                            <form action="/user/update/{{$user->id}}" enctype="multipart/form-data" method="post">
                                 @csrf
                                 <div class="form-group">
                                     <label for="name">Name</label>

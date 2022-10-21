@@ -56,7 +56,7 @@
                         <td>${{$expense->amount}}</td>
                         <td>{{$expense->created_at->format('M d Y h:m')}}</td>
                         <td>
-                            <a href="/admin/expense/view/{{$expense->id}}" class="btn btn-primary" title="View Expense"><i class="fa fa-eye"></i></a>
+                            <a href="/expense/view/{{$expense->id}}" class="btn btn-primary" title="View Expense"><i class="fa fa-eye"></i></a>
                     </tr>
 
                     </tr>

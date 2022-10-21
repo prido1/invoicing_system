@@ -57,7 +57,7 @@ class UserController extends Controller
 
             $user->update($data);
 
-            return redirect('admin/user/edit/' . $id . '?staff')->with(['success' => 'updated successfully']);
+            return redirect('user/edit/' . $id . '?staff')->with(['success' => 'updated successfully']);
 
     }
 
@@ -99,6 +99,6 @@ class UserController extends Controller
                 'password' => bcrypt($request->password)
             ]);
 
-            return redirect('admin/user')->with(['success' => 'user created successfully']);
+            return redirect('user')->with(['success' => 'user created successfully']);
     }
 }

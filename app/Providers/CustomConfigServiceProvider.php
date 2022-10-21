@@ -20,7 +20,7 @@ class CustomConfigServiceProvider extends ServiceProvider
         if (Schema::hasTable('settings')) {
             $smtp_settings = DB::table('settings')->where('type', 'smtp')->pluck('description', 'label');
             if (!$smtp_settings->isEmpty()) {
-                json_decode($smtp_settings['from']);
+                json_decode($smtp_settings['from']); 
                 $smtp_config = [
                     'transport' => 'smtp',
                     'host' => $smtp_settings['smtp_host'],
@@ -64,6 +64,21 @@ class CustomConfigServiceProvider extends ServiceProvider
                 ];
                 config(['config.EMAIL' => $email_config]);
             }
+
+            $imap_settings = DB::table('settings')->where('type', 'imap')->pluck('description', 'label');
+            if (!$imap_settings->isEmpty()) {
+                $imap_config = [
+                    'ImapHost' => $imap_settings['imap_host'] ?? env('IMAP_HOST'),
+                    'ImapPort' => $imap_settings['imap_port'] ?? env('IMAP_PORT'),
+                    'ImapUser' => $imap_settings['imap_user'] ?? env('IMAP_USER'),
+                    'ImapPass' => $imap_settings['imap_pass'] ?? env('IMAP_PASS'),
+                    'ImapSentFolder' => $imap_settings['imap_sent_folder'] ?? env('IMAP_SENTFOLDER'),
+                    'ImapEncryption' => $imap_settings['imap_encryption'] ?? env('IMAP_ENCRYPTION'),
+                    
+                ];
+                config(['mail.imap' => $imap_config]);
+            }
+
 
         }
 

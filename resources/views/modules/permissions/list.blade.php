@@ -2,13 +2,9 @@
 
 @extends('layout')
 
-@section('title', 'Dashboard')
-@section('users-show')
-    menu-open
-@endsection
-@section('permissions')
-    active
-@endsection
+@section('title', 'List Permissions')
+@section('users-show', 'menu-open')
+@section('permissions', 'active')
 
 @section('content')
     <div class="content-wrapper">
@@ -17,7 +13,7 @@
                 <div class="col-md-6 mt-5">
                     <h4>List Permissions</h4>
             <div class="">
-                <h4 class="float-right"><a class="btn btn-primary" href="{{route('admin.permission.create')}}">Add New</a></h4>
+                <h4 class="float-right"><a class="btn btn-primary" href="{{route('permission.create')}}">Add New</a></h4>
 
                     <table class="table">
                     <thead>
@@ -33,10 +29,10 @@
                             <th scope="row">{{$loop->iteration}}</th>
                             <th scope="row">{{$permission->role->name}}</th>
                             <th scope="row">
-                                <form action="{{route('admin.permission.destroy',$permission->id)}}" method="post">
+                                <form action="{{route('permission.destroy',$permission->id)}}" method="post">
                                     @method('DELETE')
                                     @csrf
-                                    <a href="{{route('admin.permission.edit', $permission->id)}}" class="btn btn-warning">Edit</a>
+                                    <a href="{{route('permission.edit', $permission->id)}}" class="btn btn-warning">Edit</a>
                                         <button class="btn btn-danger">Delete</button>
                                 </form>
                             </th>

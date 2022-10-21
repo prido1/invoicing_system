@@ -19,6 +19,7 @@ class Quotation extends Model
         'discount',
         'payment_type',
         'payment_currency',
+        'vat'
     ];
 
     protected $casts = [

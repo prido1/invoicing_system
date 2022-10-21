@@ -30,8 +30,17 @@ return [
     |
     | Supported: "smtp", "sendmail", "mailgun", "ses",
     |            "postmark", "log", "array"
-    |
+    | 
     */
+
+    'imap' => [
+        'ImapHost' => env('IMAP_HOST'),
+        'ImapPort' => env('IMAP_PORT'), 
+        'ImapUser' => env('IMAP_USER'),
+        'ImapPass' => env('IMAP_PASS'),
+        'ImapEncryption' => env('IMAP_ENCRYPTION'),
+        'ImapSentFolder' => env('IMAP_SENTFOLDER')
+    ],
 
     'mailers' => [
         'smtp' => [

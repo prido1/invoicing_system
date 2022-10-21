@@ -1,5 +1,7 @@
 <?php
 
+use App\Providers\ViewComposerServiceProvider;
+
 return [
 
     /*
@@ -13,7 +15,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Laravel'), 
 
     /*
     |--------------------------------------------------------------------------
@@ -126,6 +128,7 @@ return [
     'app_phone' => env('APP_PHONE'),
     'app_address' => env('APP_ADDRESS'),
 
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -178,7 +181,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\CustomConfigServiceProvider::class,
-        Barryvdh\DomPDF\ServiceProvider::class
+        Barryvdh\DomPDF\ServiceProvider::class,
+        ViewComposerServiceProvider::class
 
     ],
 

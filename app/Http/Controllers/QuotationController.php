@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
-use App\Models\EmailTemplate;
-use App\Models\PaymentCurrency;
-use App\Models\PaymentStatus;
-use App\Models\PaymentType;
+use App\Models\Settings;
 use App\Models\Quotation;
-use App\Models\QuotationItem;
-use Barryvdh\DomPDF\Facade as PDF;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\PaymentType;
 use Illuminate\Http\Request;
+use App\Models\EmailTemplate;
+use App\Models\PaymentStatus;
+use App\Models\QuotationItem;
+use App\Models\PaymentCurrency;
+use App\Helpers\SendEmailHelper;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Database\Eloquent\Builder;
 
 class QuotationController extends Controller
 {
@@ -53,13 +55,14 @@ class QuotationController extends Controller
         if (!Gate::allows('read', 'quotation')) {
             return response()->json(['message' => 'not authorized'], 403);
         }
+        $settings = Settings::where('type', 'system')->pluck('description', 'label');
         $quotation = Quotation::find($id);
         $templates = EmailTemplate::all();
         $total = 0;
         foreach ($quotation->items as $item) {
             $total = $total + ($item->quantity * $item->unit_price);
         }
-        return view('modules.quotation.view-quotation')->with(['templates' => $templates, 'quotation' => $quotation, 'total_price' => $total]);
+        return view('modules.quotation.view-quotation')->with(['templates' => $templates, 'quotation' => $quotation, 'total_price' => $total, 'settings' => $settings]);
 
     }
 
@@ -129,7 +132,8 @@ class QuotationController extends Controller
             'payment_status' => $request->payment_status,
             'payment_currency' => $request->payment_currency,
             'discount' => $request->discount,
-            'terms_condition' => $request->terms_conditions
+            'terms_condition' => $request->terms_conditions,
+            'vat' => $request->vat
         ]);
 
         foreach ($request->quantity as $key => $value) {
@@ -141,7 +145,7 @@ class QuotationController extends Controller
             ]);
         }
 
-        return redirect('admin/quotation/view/' . $quotation->id);
+        return redirect('quotation/view/' . $quotation->id);
     }
 
     //edit QuotationController
@@ -159,6 +163,7 @@ class QuotationController extends Controller
         foreach ($quotation->items as $item) {
             $total = $total + ($item->quantity * $item->unit_price);
         }
+
         return view('modules.quotation.edit-quotation')->with([
             'clients' => $clients,
             'payment_type' => $payment_type,
@@ -191,6 +196,7 @@ class QuotationController extends Controller
         $quotation->payment_currency = $request->payment_currency;
         $quotation->discount = $request->discount;
         $quotation->terms_condition = $request->terms_conditions;
+        $quotation->vat = $request->vat;
         $quotation->update();
 
         $items = QuotationItem::where('quotation_id', $quotation->id);
@@ -205,7 +211,7 @@ class QuotationController extends Controller
             ]);
         }
 
-        return redirect('admin/quotation/view/' . $quotation->id);
+        return redirect('quotation/view/' . $quotation->id);
     }
 
     //destroy
@@ -230,23 +236,16 @@ class QuotationController extends Controller
             'subject' => 'required',
             'body' => 'required',
         ]);
-        $attachedFileName = '';
+        $attachment = null;
         $title = "<h2>$request->subject</h2>";
         $content = "<p>$request->body</p>";
-        if ($request->has('attach')) {
-            $attachedFileName = $this->storeInvoice($request->quotation_id);
+        if ($request->has('attach')) { 
+            $attachment = $this->storeInvoice($request->quotation_id);
         }
 
         try {
-            Mail::send('emails.send', ['title' => $title, 'content' => $content], function ($message) use ($request, $attachedFileName) {
-                $email = str_replace(' ', '', $request->email);
-                $receipients = explode(',', $email);
-                $message->to($receipients);
-                $message->subject($request->subject);
-                if ($attachedFileName != "") {
-                    $message->attach($attachedFileName, ['mime' => 'pdf']);
-                }
-            });
+            SendEmailHelper::sendEmail($request->email, $request->subject, $title, $content, $attachment);
+            
         } catch (\Exception $e) {
             return redirect()->back()->with(['error' => $e->getMessage()]);
         }
@@ -261,15 +260,18 @@ class QuotationController extends Controller
         foreach ($quotation->items as $item) {
             $total_price = $total_price + ($item->quantity * $item->unit_price);
         }
+        $total_price = $total_price * ($quotation->vat / 100 + 1);
+        $settings = Settings::where('type', 'email')->pluck('description', 'label');
         try {
-            $pdf = PDF::loadView('modules.quotation.pdf', compact('quotation', 'total_price'));
-            $quotationPath = 'assets/pdf/quotation-' . $quotation->id . '.pdf';
+            $file_name = 'quotation-' . $quotation->id . '.pdf';
+            $pdf = PDF::loadView('modules.quotation.pdf', compact('quotation', 'total_price', 'settings'));
+            $quotationPath = 'assets/pdf/'.$file_name;
             $pdf->save($quotationPath);
         } catch (\Exception $e) {
             return redirect()->back()->with(['error' => $e->getMessage()]);
 
         }
-        return $quotationPath;
+        return (object) ['filename' => $file_name, 'path' => $quotationPath];
     }
 
     public function printQuotation($id)
@@ -279,7 +281,8 @@ class QuotationController extends Controller
         foreach ($quotation->items as $item) {
             $total_price = $total_price + ($item->quantity * $item->unit_price);
         }
-        $pdf = PDF::loadView('modules.quotation.pdf', compact('quotation', 'total_price'));
+        $settings = Settings::where('type', 'email')->pluck('description', 'label');
+        $pdf = PDF::loadView('modules.quotation.pdf', compact('quotation', 'total_price', 'settings'));
         $quotationPath = 'assets/pdf' . '/' . date('Y-m-d-H-i-s') . "-invoice-" . $quotation->id . '.pdf';
         if ($pdf->save($quotationPath)) {
             return $pdf->stream();

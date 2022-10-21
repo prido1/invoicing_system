@@ -172,13 +172,35 @@
         .table-striped > tbody > tr:nth-child(odd) > th {
             background-color: #f0f3f5;
         }
+        .company-details{
+            text-align: right
+        }
+        .company-details span{
+            display: block;
+            font-size: 12px
+        }
+        #page-wrap-inner{
+            padding: 20px;
+        }
 
     </style>
 </head>
 <body>
 <div id="page-wrap">
     <div id="page-wrap-inner">
-        <img style="width: 100%;height: auto" src="{{asset('bbb.png')}}" class="">
+        <table width="100%">
+            <tr>
+                <td width="30%">
+                    <img style="width: 100%;height: auto" src="{{ asset($settings['logo'] ?? '') }}" class="">
+                </td>
+                <td width="70%" class="company-details">
+                    <span><strong>Address:  </strong>{{ $settings['app_address'] ?? '' }}</span>
+                    <span><strong>Email:  </strong>{{ $settings['app_email'] ?? '' }}</span>
+                   <span> <strong>Phone:  </strong>{{ $settings['app_phone'] ?? '' }}</span>
+                </td>
+            </tr>
+        </table>
+        
 
         <hr>
         <table width="100%">
@@ -253,6 +275,10 @@
                         <tr>
                             <th class="table-label">Sub Total</th>
                             <td width="30%" class="table-amount text-right">{{ number_format($total_price, 2)}}</td>
+                        </tr>
+                        <tr>
+                            <th class="table-label">Vat %</th>
+                            <td width="30%" class="table-amount text-right">{{ number_format($quotation->vat, 2)}}</td>
                         </tr>
                         <tr>
                             <th class="table-label">Discount</th>
@@ -424,7 +450,7 @@
             </tr>
             </tbody>
         </table>
-        <p style="text-align: center;font-style: italic"><small>FOR COMMERCIAL & DOMESTIC TRANSPORT LOGISTICS</small></p>
+        <p style="text-align: center;font-style: italic"><small>{{$settings['app_moto']}}</small></p>
     </div>
 </div>
 </body>

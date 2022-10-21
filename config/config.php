@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'app_version' => env('APP_VERSION', '1.1.2'),
     'TAGS' => [
         '{name}', '{email}', '{company_name}',
         '{phone}', '{address}', '{total_due}',

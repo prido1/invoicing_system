@@ -28,6 +28,8 @@ class Invoice extends Model
         'schedule',
         'recurring',
         'sent',
+        'is_scheduled',
+        'vat'
     ];
 
     protected $casts = [

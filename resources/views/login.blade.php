@@ -19,7 +19,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="#"><img src="{{asset('logo.png')}}" alt="chiminya logo" class=" elevation-3"
+    <a href="#"><img src="{{asset($global_settings['logo']  ?? '')}}" alt="{{$global_settings['app_name'] ?? ''}}" class=" elevation-3"
                      style="opacity: .8;width: 108px"></a>
   </div>
   <!-- /.login-logo -->
@@ -49,7 +49,7 @@
                 @endif
     </div>
 </div>
-      <form action="/admin/login" method="post" enctype="multipart/form-data">
+      <form action="login" method="post" enctype="multipart/form-data">
           @csrf
         <div class="input-group mb-3">
           <input name="email" type="email" class="form-control" placeholder="Email">

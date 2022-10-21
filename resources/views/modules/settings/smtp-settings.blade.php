@@ -1,12 +1,8 @@
 @extends('layout')
 
-@section('title', 'Dashboard')
-@section('settings-show')
-    menu-open
-@endsection
-@section('smtp-settings')
-    active
-@endsection
+@section('title', 'Smtp Settings')
+@section('settings-show', 'menu-open')
+@section('smtp-settings', 'active')
 
 @section('content')
 
@@ -52,7 +48,7 @@
 
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <form action="/admin/settings/smtp/store" method="post" enctype="multipart/form-data">
+                                        <form action="/settings/smtp/store" method="post" enctype="multipart/form-data">
                                             @csrf
                                         <div class="row">
                                             <div class="col-md-6 form-group">
@@ -79,8 +75,8 @@
                                                 <label for="smtp_security">Smtp Security</label>
                                                 <select name="smtp_security" id="smtp_security" class="form-control">
                                                     <option value="">Select SMTP Security</option>
-                                                    <option @if(isset($settings['smtp_security']) && $settings['smtp_security'] == 'SSL') selected @endif value="SSL">SSL</option>
-                                                    <option @if(isset($settings['smtp_security']) && $settings['smtp_security'] == 'TSL') selected @endif value="TSL">TSL</option>
+                                                    <option @if(isset($settings['smtp_security']) && $settings['smtp_security'] == 'ssl') selected @endif value="ssl">SSL</option>
+                                                    <option @if(isset($settings['smtp_security']) && $settings['smtp_security'] == 'tls') selected @endif value="tls">TSL</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6 form-group">
@@ -99,7 +95,7 @@
                                     </div>
 
                                     <div class="col-md-4">
-                                        <form action="/admin/settings/smtp/test" method="post" enctype="multipart/form-data">
+                                        <form action="/settings/smtp/test" method="post" enctype="multipart/form-data">
                                             @csrf
                                             <input type="submit" class="ml-3 btn btn-primary" value="Test Connection">
                                         </form>

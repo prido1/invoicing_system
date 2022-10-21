@@ -1,12 +1,8 @@
 @extends('layout')
 
-@section('title', 'Users')
-@section('users-show')
-    menu-open
-@endsection
-@section('list-user')
-    active
-@endsection
+@section('title', 'List Users')
+@section('users-show', 'menu-open')
+@section('list-user', 'active')
 
 @section('content')
     <div class="content-wrapper">
@@ -15,7 +11,7 @@
                 <div class="col-md-8 mt-5">
                     <h4>List All Staff</h4>
                     @can('create', 'staff')
-                        <h4 class="float-right"><a class="btn btn-primary" href="/admin/create-user?staff">Add New</a></h4>
+                        <h4 class="float-right"><a class="btn btn-primary" href="/create-user?staff">Add New</a></h4>
                     @endcan
                     <table class="table table-bordered">
                         <thead>
@@ -38,7 +34,7 @@
 
                                         <a id="status_{{$user->id}}" href="javascript:void(0)" class="btn {{$user->status == 1 ? 'btn-warning' : 'btn-success'}}"
                                            onclick="user_status('{{ $user->id }}', '{{$user->status == 1 ? 0 : 1}}')"><i class="fa {{$user->status == 1 ? 'fa-ban' : 'fa-check-square'}}"   ></i></a>
-                                        <a href="/admin/user/edit/{{$user->id}}" class="btn btn-info"><i class="fa fa-pen"></i></a>
+                                        <a href="/user/edit/{{$user->id}}" class="btn btn-info"><i class="fa fa-pen"></i></a>
                                         <a href="javascript:void(0)"
                                            onclick="delete_item('{{ $user->id }}')" class="btn btn-danger"  title="delete"><i class="fa fa-trash" ></i></a>
 
@@ -62,7 +58,7 @@
         function delete_item(user_id) {
             var table_row = '#row_'+user_id;
             var token =  "<?php echo e(csrf_token()); ?>";
-            url = "<?php echo e(route('admin.user.delete')); ?>"
+            url = "<?php echo e(route('user.delete')); ?>"
 
             swal({
                 title: "<?php echo e(__('are_you_sure?')); ?>",
@@ -103,7 +99,7 @@
         function user_status(user_id, action) {
             var row= '#status_'+user_id;
             var token =  "<?php echo e(csrf_token()); ?>";
-            url = "<?php echo e(route('admin.user.status')); ?>"
+            url = "<?php echo e(route('user.status')); ?>"
             var displayAction = action == 1 ? 'true' : 'false';
 
             swal({

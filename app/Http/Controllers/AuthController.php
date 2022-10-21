@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
     public function login(){
-        return view('login');
+        $settings = Settings::where('type', 'system')->pluck('description', 'label');
+        return view('login')->with(['settings' => $settings]);
     }
 
     public function signIn(Request $request)
@@ -22,12 +24,12 @@ class AuthController extends Controller
         if (!auth()->attempt($loginData)) {
             return redirect()->back()->with(['error'=> 'invalid credentials']);
         }
-        return redirect()->intended('admin/dashboard');
+        return redirect()->intended('dashboard');
     }
 
     public function logout(){
         Auth::logout();
-        return redirect('admin/login');
+        return redirect('login');
     }
 
     public function store(Request $request)
@@ -48,7 +50,7 @@ class AuthController extends Controller
                 'password' => bcrypt($request->password)
             ]);
 
-            return redirect('admin/users?staff')->with(['success' => 'user created successfully']);
+            return redirect('users?staff')->with(['success' => 'user created successfully']);
 
     }
 }

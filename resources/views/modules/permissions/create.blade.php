@@ -1,12 +1,8 @@
 @extends('layout')
 
-@section('title', 'Dashboard')
-@section('users-show')
-    menu-open
-@endsection
-@section('permissions')
-    active
-@endsection
+@section('title', 'Create Permission')
+@section('users-show', 'menu-open')
+@section('permissions', 'active')
 
 @section('content')
     <div class="content-wrapper">
@@ -14,7 +10,7 @@
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-10 mt-5">
                     <h4>create Permissions</h4>
-                    <form action="{{route('admin.permission.store')}}" method="post" enctype="multipart/form-data">
+                    <form action="{{route('permission.store')}}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-md-4 col-lg-4">

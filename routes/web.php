@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
             //dd('Your hosting has been suspended please contact your hosting provider');
         }
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+Route::group([], function () {
 
     Route::group(['middleware' => 'guest'], function () {
         Route::get('/login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login');
@@ -21,6 +21,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
     Route::group(['middleware' => 'auth'], function () {
         Route::get('dashboard', [\App\Http\Controllers\DashboardController::class, 'index']);
+        Route::get('/', [\App\Http\Controllers\DashboardController::class, 'index']);
         //invoice
         Route::group(['prefix' => 'invoice', 'as' => 'invoice.'], function () {
             Route::get('/', [\App\Http\Controllers\InvoiceController::class, 'index']);
@@ -34,6 +35,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::post('update/{id}', [\App\Http\Controllers\InvoiceController::class, 'update']);
             Route::post('/send', [\App\Http\Controllers\InvoiceController::class, 'send']);
             Route::delete('destroy/{id}', [\App\Http\Controllers\InvoiceController::class, 'destroy']);
+            Route::get('/sent', [\App\Http\Controllers\InvoiceController::class, 'listSent']);
         });
 
         //quotation
@@ -84,6 +86,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::post('/smtp/store', [\App\Http\Controllers\SettingsController::class, 'SmtpStore']);
             Route::get('/email', [\App\Http\Controllers\SettingsController::class, 'emailSettings']);
             Route::post('/email', [\App\Http\Controllers\SettingsController::class, 'storeEmailSettings']);
+            Route::get('/system', [\App\Http\Controllers\SettingsController::class, 'systemSettings']);
+            Route::post('/system/store', [\App\Http\Controllers\SettingsController::class, 'storeSystemSettings']);
+            Route::get('/imap', [\App\Http\Controllers\SettingsController::class, 'imapSettings']);
+            Route::post('/imap/store', [\App\Http\Controllers\SettingsController::class, 'imapStore']);
+            Route::post('/imap/test', [\App\Http\Controllers\SettingsController::class, 'testImap']);
         });
 
         //settings
