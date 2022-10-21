@@ -320,9 +320,12 @@ class InvoiceController extends Controller
         foreach ($invoice->items as $item) {
             $total_price = $total_price + ($item->quantity * $item->unit_price);
         }
+        $settings = Settings::where('type', 'system')->pluck('description', 'label');
+        // dd($settings);
         $total_price = $total_price * ($invoice->vat / 100 + 1);
-        $pdf = PDF::loadView('modules.invoice.pdf', compact('invoice', 'total_price'));
-        $invoicePath = 'assets/pdf' . '/-invoice-' . $invoice->id . '.pdf';
+ $file_name = date('Y-m-d-H-i-s') . "-invoice-" . $invoice->id . '.pdf';
+            $pdf = PDF::loadView('modules.invoice.pdf', compact('invoice', 'total_price', 'settings'));
+            $invoicePath = 'assets/pdf' . '/' . $file_name;
         if ($pdf->save($invoicePath)) {
             return $pdf->stream();
         } else {

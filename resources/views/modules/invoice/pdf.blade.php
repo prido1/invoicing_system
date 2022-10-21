@@ -207,7 +207,7 @@
                     <img style="width: 100%;height: auto" src="{{ asset($settings['logo'] ?? '') }}" class="">
                 </td>
                 <td width="70%" class="company-details">
-                    <span><strong>Address:  </strong>{{ $settings['app_address'] ?? '' }}</span>
+                    <span><strong>Address:  </strong>{{ $settings['app_address'] }}</span>
                     <span><strong>Email:  </strong>{{ $settings['app_email'] ?? '' }}</span>
                    <span> <strong>Phone:  </strong>{{ $settings['app_phone'] ?? '' }}</span>
                 </td>

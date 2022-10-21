@@ -261,9 +261,9 @@ class QuotationController extends Controller
             $total_price = $total_price + ($item->quantity * $item->unit_price);
         }
         $total_price = $total_price * ($quotation->vat / 100 + 1);
-        $settings = Settings::where('type', 'email')->pluck('description', 'label');
+        $settings = Settings::where('type', 'system')->pluck('description', 'label');
         try {
-            $file_name = 'quotation-' . $quotation->id . '.pdf';
+            $file_name = date('Y-m-d-H-i-s') . '-quotation-' . $quotation->id . '.pdf';
             $pdf = PDF::loadView('modules.quotation.pdf', compact('quotation', 'total_price', 'settings'));
             $quotationPath = 'assets/pdf/'.$file_name;
             $pdf->save($quotationPath);
@@ -281,9 +281,11 @@ class QuotationController extends Controller
         foreach ($quotation->items as $item) {
             $total_price = $total_price + ($item->quantity * $item->unit_price);
         }
-        $settings = Settings::where('type', 'email')->pluck('description', 'label');
-        $pdf = PDF::loadView('modules.quotation.pdf', compact('quotation', 'total_price', 'settings'));
-        $quotationPath = 'assets/pdf' . '/' . date('Y-m-d-H-i-s') . "-invoice-" . $quotation->id . '.pdf';
+        $total_price = $total_price * ($quotation->vat / 100 + 1);
+        $settings = Settings::where('type', 'system')->pluck('description', 'label');
+           $file_name = date('Y-m-d-H-i-s') . '-quotation-' . $quotation->id . '.pdf';
+            $pdf = PDF::loadView('modules.quotation.pdf', compact('quotation', 'total_price', 'settings'));
+            $quotationPath = 'assets/pdf/'.$file_name;
         if ($pdf->save($quotationPath)) {
             return $pdf->stream();
         } else {
