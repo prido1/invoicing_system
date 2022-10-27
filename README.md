@@ -1,4 +1,4 @@
-# Invicing System
+# Invoicing System
 
 
 This is a simple laravel billing system. You can use it to send html invoice emails.
