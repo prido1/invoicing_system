@@ -2,7 +2,7 @@
 
 @section('title', 'Imap Settings')
 @section('settings-show', 'menu-open')
-@section('email-settings', 'active')
+@section('imap-settings', 'active')
 
 @section('content')
 

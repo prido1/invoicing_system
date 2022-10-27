@@ -14,23 +14,7 @@ return [
         'acc_number' => '',
         'acc_name' => '',
 
-        'nostro_1_bank' => '',
-        'nostro_1_branch' => '',
-        'nostro_1_acc_number' => '',
-        'nostro_1_acc_name' => '',
-
-        'nostro_2_bank' => '',
-        'nostro_2_branch' => '',
-        'nostro_2_acc_number' => '',
-        'nostro_2_acc_name' => '',
-
-        'ecco_number' => '',
-        'ecco_name' => '',
-
-        'show_eco' => 0,
-        'show_bank' => 0,
-        'show_nostro_1' => 0,
-        'show_nostro_2' => 0,
+        'show_bank' => 0
     ],
     'RECURRING_INTERVALS' => [
         '1d' => [

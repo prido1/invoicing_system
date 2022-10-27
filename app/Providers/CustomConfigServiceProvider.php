@@ -42,24 +42,7 @@ class CustomConfigServiceProvider extends ServiceProvider
                     'branch' => $email_settings['branch'] ?? '',
                     'acc_number' => $email_settings['acc_number'] ?? '',
                     'acc_name' => $email_settings['acc_name'] ?? '',
-
-                    'nostro_1_bank' => $email_settings['nostro_1_bank'] ?? '',
-                    'nostro_1_branch' => $email_settings['nostro_1_branch'] ?? '',
-                    'nostro_1_acc_number' => $email_settings['nostro_1_acc_number'] ?? '',
-                    'nostro_1_acc_name' => $email_settings['nostro_1_acc_name'] ?? '',
-
-                    'nostro_2_bank' => $email_settings['nostro_2_bank'] ?? '',
-                    'nostro_2_branch' => $email_settings['nostro_2_branch'] ?? '',
-                    'nostro_2_acc_number' => $email_settings['nostro_2_acc_number'] ?? '',
-                    'nostro_2_acc_name' => $email_settings['nostro_2_acc_name'] ?? '',
-
-                    'ecco_number' => $email_settings['ecco_number'] ?? '',
-                    'ecco_name' => $email_settings['ecco_name'] ?? '',
-
-                    'show_eco' => $email_settings['show_eco'] ?? '',
-                    'show_bank' => $email_settings['show_bank'] ?? '',
-                    'show_nostro_1' => $email_settings['show_nostro_1'] ?? '',
-                    'show_nostro_2' => $email_settings['show_nostro_2'] ?? '',
+                    'show_bank' => $email_settings['show_bank'] ?? ''
 
                 ];
                 config(['config.EMAIL' => $email_config]);

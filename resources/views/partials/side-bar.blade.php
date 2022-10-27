@@ -268,7 +268,7 @@
                         <li class="nav-item">
                             <a href="/settings/email" class="nav-link @yield('email-settings')">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Email Settings</p>
+                                <p>Banking Details</p>
                             </a>
                         </li>
 

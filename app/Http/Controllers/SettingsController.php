@@ -227,116 +227,12 @@ class SettingsController extends Controller
 
                 Settings::updateOrCreate(
                     [
-                        'type' => 'email', 'label' => 'ecco_number',
-                    ], [
-                        'type' => 'email', 'label' => 'ecco_number', 'description' => $request->ecco_number,
-                    ]
-                );
-
-                Settings::updateOrCreate(
-                    [
-                        'type' => 'email', 'label' => 'ecco_name',
-                    ], [
-                        'type' => 'email', 'label' => 'ecco_name', 'description' => $request->ecco_name,
-                    ]
-                );
-
-                Settings::updateOrCreate(
-                    [
-                        'type' => 'email', 'label' => 'show_eco',
-                    ], [
-                        'type' => 'email', 'label' => 'show_eco', 'description' => $request->show_eco ? 1 : 0,
-                    ]
-                );
-
-                Settings::updateOrCreate(
-                    [
                         'type' => 'email', 'label' => 'show_bank',
                     ], [
                         'type' => 'email', 'label' => 'show_bank', 'description' => $request->show_bank ? 1 : 0,
                     ]
                 );
 
-                Settings::updateOrCreate(
-                    [
-                        'type' => 'email', 'label' => 'show_nostro_1',
-                    ], [
-                        'type' => 'email', 'label' => 'show_nostro_1', 'description' => $request->show_nostro_1 ? 1 : 0,
-                    ]
-                );
-
-                Settings::updateOrCreate(
-                    [
-                        'type' => 'email', 'label' => 'show_nostro_2',
-                    ], [
-                        'type' => 'email', 'label' => 'show_nostro_2', 'description' => $request->show_nostro_2 ? 1 : 0,
-                    ]
-                );
-                //nostro1
-                Settings::updateOrCreate(
-                    [
-                        'type' => 'email', 'label' => 'nostro_1_bank',
-                    ], [
-                        'type' => 'email', 'label' => 'nostro_1_bank', 'description' => $request->nostro_1_bank,
-                    ]
-                );
-
-                Settings::updateOrCreate(
-                    [
-                        'type' => 'email', 'label' => 'nostro_1_branch',
-                    ], [
-                        'type' => 'email', 'label' => 'nostro_1_branch', 'description' => $request->nostro_1_branch,
-                    ]
-                );
-
-                Settings::updateOrCreate(
-                    [
-                        'type' => 'email', 'label' => 'nostro_1_acc_number',
-                    ], [
-                        'type' => 'email', 'label' => 'nostro_1_acc_number', 'description' => $request->nostro_1_acc_number,
-                    ]
-                );
-
-                Settings::updateOrCreate(
-                    [
-                        'type' => 'email', 'label' => 'nostro_1_acc_name',
-                    ], [
-                        'type' => 'email', 'label' => 'nostro_1_acc_name', 'description' => $request->nostro_1_acc_name,
-                    ]
-                );
-
-                //nostro2
-                Settings::updateOrCreate(
-                    [
-                        'type' => 'email', 'label' => 'nostro_2_bank',
-                    ], [
-                        'type' => 'email', 'label' => 'nostro_2_bank', 'description' => $request->nostro_2_bank,
-                    ]
-                );
-
-                Settings::updateOrCreate(
-                    [
-                        'type' => 'email', 'label' => 'nostro_2_branch',
-                    ], [
-                        'type' => 'email', 'label' => 'nostro_2_branch', 'description' => $request->nostro_2_branch,
-                    ]
-                );
-
-                Settings::updateOrCreate(
-                    [
-                        'type' => 'email', 'label' => 'nostro_2_acc_number',
-                    ], [
-                        'type' => 'email', 'label' => 'nostro_2_acc_number', 'description' => $request->nostro_2_acc_number,
-                    ]
-                );
-
-                Settings::updateOrCreate(
-                    [
-                        'type' => 'email', 'label' => 'nostro_2_acc_name',
-                    ], [
-                        'type' => 'email', 'label' => 'nostro_2_acc_name', 'description' => $request->nostro_2_acc_name,
-                    ]
-                );
 
             });
         } catch (\Exception$e) {
