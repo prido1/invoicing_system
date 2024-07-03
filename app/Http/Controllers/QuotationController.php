@@ -116,12 +116,19 @@ class QuotationController extends Controller
         if (!Gate::allows('create', 'quotation')) {
             return response()->json(['message' => 'not authorized'], 403);
         }
+
         $request->validate([
             'client_id' => 'required',
             'create_date' => 'required',
+            'due_date' => 'required',
             'payment_type' => 'required',
             'payment_currency' => 'required',
-        ]);
+            'quantity.*' => 'required',
+            'unit_price.*' => 'required',
+            'description.*' => 'required',
+        ], ['description.*.required'=>'Description required',
+            'unit_price.*.required'=>'Unit price required',
+            'quantity.*.required'=>'Quantity required']);
 
         $quotation = Quotation::create([
             'client_id' => $request->client_id,
@@ -145,7 +152,7 @@ class QuotationController extends Controller
             ]);
         }
 
-        return redirect('quotation/view/' . $quotation->id);
+        return response()->json(['redirect'=>route('quotation.view', ['id'=>$quotation->id])]);
     }
 
     //edit QuotationController
@@ -183,9 +190,15 @@ class QuotationController extends Controller
         $request->validate([
             'client_id' => 'required',
             'create_date' => 'required',
+            'due_date' => 'required',
             'payment_type' => 'required',
             'payment_currency' => 'required',
-        ]);
+            'quantity.*' => 'required',
+            'unit_price.*' => 'required',
+            'description.*' => 'required',
+        ], ['description.*.required'=>'Description required',
+            'unit_price.*.required'=>'Unit price required',
+            'quantity.*.required'=>'Quantity required']);
 
         $quotation = Quotation::find($id);
         $quotation->client_id = $request->client_id;
@@ -211,11 +224,11 @@ class QuotationController extends Controller
             ]);
         }
 
-        return redirect('quotation/view/' . $quotation->id);
+        return response()->json(['redirect'=>route('quotation.view', ['id'=>$quotation->id])]);
     }
 
     //destroy
-    public function destroy()
+    public function destroy($id)
     {
         if (!Gate::allows('delete', 'quotation')) {
             return response()->json(['message' => 'not authorized'], 403);
@@ -239,13 +252,13 @@ class QuotationController extends Controller
         $attachment = null;
         $title = "<h2>$request->subject</h2>";
         $content = "<p>$request->body</p>";
-        if ($request->has('attach')) { 
+        if ($request->has('attach')) {
             $attachment = $this->storeInvoice($request->quotation_id);
         }
 
         try {
             SendEmailHelper::sendEmail($request->email, $request->subject, $title, $content, $attachment);
-            
+
         } catch (\Exception $e) {
             return redirect()->back()->with(['error' => $e->getMessage()]);
         }

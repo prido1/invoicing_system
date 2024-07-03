@@ -173,11 +173,14 @@
             background-color: #f0f3f5;
         }
         .company-details{
-            text-align: right
+            text-align: right;
         }
         .company-details span{
-            display: block;
-            font-size: 12px
+            font-size: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .company-details strong{
+            white-space: nowrap;
         }
         #page-wrap-inner{
             padding: 20px;
@@ -190,17 +193,21 @@
     <div id="page-wrap-inner">
         <table width="100%">
             <tr>
-                <td width="30%">
-                    <img style="width: 100%;height: auto" src="{{ asset($settings['logo'] ?? '') }}" class="">
+                <td width="40%">
+                    <img style="width: 150px;height: auto" src="{{ asset($settings['logo'] ?? '') }}" class="">
                 </td>
-                <td width="70%" class="company-details">
+                <td width="60%" class="company-details">
+                    <span style="font-size: 20px;"><strong>{{ $settings['app_name'] ?? '' }}</strong></span>
                     <span><strong>Address:  </strong>{{ $settings['app_address'] ?? '' }}</span>
-                    <span><strong>Email:  </strong>{{ $settings['app_email'] ?? '' }}</span>
-                   <span> <strong>Phone:  </strong>{{ $settings['app_phone'] ?? '' }}</span>
+                    <span>
+                                    <strong>Email(s):  </strong>
+                                    {!! implode('<br>', explode(',', $settings['app_email'])) !!}
+                                </span>
+                    <span> <strong>Phone Number(s):  </strong>{!! implode('<br>', explode(',', $settings['app_phone'])) !!}</span>
                 </td>
             </tr>
         </table>
-        
+
 
         <hr>
         <table width="100%">

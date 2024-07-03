@@ -1,4 +1,4 @@
-@extends('layout') 
+@extends('layout')
 
 @section('title', 'General Settings')
 @section('settings-show', 'menu-open')
@@ -50,35 +50,35 @@
                                 <div class="col-md-8">
                                     <form action="/settings/system/store" method="post" enctype="multipart/form-data">
                                         @csrf
-                                        <div class="row"> 
+                                        <div class="row">
                                             <div class="col-md-6 form-group">
                                                 <label for="app_name">App Name</label>
-                                                <input value="{{isset($settings['app_name']) ? $settings['app_name'] : ''}}" type="text" class="form-control" name="app_name" id="app_name"
+                                                <input value="{{$settings['app_name'] ?? ''}}" type="text" class="form-control" name="app_name" id="app_name"
                                                        placeholder="Input your app name">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="app_email">Email</label>
-                                                <input value="{{isset($settings['app_email']) ? $settings['app_email'] : ''}}" type="email" class="form-control" name="app_email" id="app_email"
+                                                <input value="{{$settings['app_email'] ?? ''}}" type="text" class="form-control" name="app_email" id="app_email"
                                                        placeholder="Input your app email">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="app_url">App Url</label>
-                                                <input value="{{isset($settings['app_url']) ? $settings['app_url'] : ''}}" type="url" class="form-control" name="app_url" id="app_url"
+                                                <input value="{{$settings['app_url'] ?? ''}}" type="url" class="form-control" name="app_url" id="app_url"
                                                        placeholder="Input the app url">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="app_phone">App Phone</label>
-                                                <input value="{{isset($settings['app_phone']) ? $settings['app_phone'] : ''}}" type="tel" class="form-control" name="app_phone" id="app_phone"
+                                                <input value="{{$settings['app_phone'] ?? ''}}" type="text" class="form-control" name="app_phone" id="app_phone"
                                                        placeholder="Input the app phone">
                                             </div>
                                             <div class="col-md-12 form-group">
                                                 <label for="app_phone">App Moto</label>
-                                                <input value="{{isset($settings['app_moto']) ? $settings['app_moto'] : ''}}" type="text" class="form-control" name="app_moto" id="app_moto"
+                                                <input value="{{$settings['app_moto'] ?? ''}}" type="text" class="form-control" name="app_moto" id="app_moto"
                                                        placeholder="Input the app moto">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="app_address">Address</label>
-                                                <input value="{{isset($settings['app_address']) ? $settings['app_address'] : ''}}" type="text" class="form-control" name="app_address" id="app_address"
+                                                <input value="{{$settings['app_address'] ?? ''}}" type="text" class="form-control" name="app_address" id="app_address"
                                                        placeholder="Input the company address">
                                             </div>
                                             <div class="col-md-6 form-group">

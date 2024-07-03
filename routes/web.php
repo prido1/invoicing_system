@@ -17,7 +17,7 @@ Route::group([], function () {
     });
     Route::post('logout', [\App\Http\Controllers\AuthController::class, 'logout']);
 
-   
+
 
     Route::group(['middleware' => 'auth'], function () {
         Route::get('dashboard', [\App\Http\Controllers\DashboardController::class, 'index']);
@@ -26,13 +26,13 @@ Route::group([], function () {
         Route::group(['prefix' => 'invoice', 'as' => 'invoice.'], function () {
             Route::get('/', [\App\Http\Controllers\InvoiceController::class, 'index']);
             Route::get('search', [\App\Http\Controllers\InvoiceController::class, 'getBySearchTearm']);
-            Route::get('view/{id}', [\App\Http\Controllers\InvoiceController::class, 'viewInvoice']);
+            Route::get('view/{id}', [\App\Http\Controllers\InvoiceController::class, 'viewInvoice'])->name('view');
             Route::get('create', [\App\Http\Controllers\InvoiceController::class, 'create']);
             Route::get('print/{id}', [\App\Http\Controllers\InvoiceController::class, 'printInvoice']);
             Route::get('copy/{id}', [\App\Http\Controllers\InvoiceController::class, 'copy']);
-            Route::post('save', [\App\Http\Controllers\InvoiceController::class, 'saveInvoice']);
+            Route::post('save', [\App\Http\Controllers\InvoiceController::class, 'saveInvoice'])->name('save');
             Route::get('edit/{id}', [\App\Http\Controllers\InvoiceController::class, 'edit']);
-            Route::post('update/{id}', [\App\Http\Controllers\InvoiceController::class, 'update']);
+            Route::post('update/{id}', [\App\Http\Controllers\InvoiceController::class, 'update'])->name('update');
             Route::post('/send', [\App\Http\Controllers\InvoiceController::class, 'send']);
             Route::delete('destroy/{id}', [\App\Http\Controllers\InvoiceController::class, 'destroy']);
             Route::get('/sent', [\App\Http\Controllers\InvoiceController::class, 'listSent']);
@@ -42,13 +42,13 @@ Route::group([], function () {
         Route::group(['prefix' => 'quotation', 'as' => 'quotation.'], function () {
             Route::get('/', [\App\Http\Controllers\QuotationController::class, 'index']);
             Route::get('search', [\App\Http\Controllers\QuotationController::class, 'getBySearchTearm']);
-            Route::get('view/{id}', [\App\Http\Controllers\QuotationController::class, 'viewQuotation']);
+            Route::get('view/{id}', [\App\Http\Controllers\QuotationController::class, 'viewQuotation'])->name('view');
             Route::get('create', [\App\Http\Controllers\QuotationController::class, 'create']);
             Route::get('print/{id}', [\App\Http\Controllers\QuotationController::class, 'printQuotation']);
             Route::get('copy/{id}', [\App\Http\Controllers\QuotationController::class, 'copy']);
-            Route::post('save', [\App\Http\Controllers\QuotationController::class, 'saveQuotation']);
+            Route::post('save', [\App\Http\Controllers\QuotationController::class, 'saveQuotation'])->name('save');
             Route::get('edit/{id}', [\App\Http\Controllers\QuotationController::class, 'edit']);
-            Route::post('update/{id}', [\App\Http\Controllers\QuotationController::class, 'update']);
+            Route::post('update/{id}', [\App\Http\Controllers\QuotationController::class, 'update'])->name('update');
             Route::post('send', [\App\Http\Controllers\QuotationController::class, 'send']);
             Route::delete('destroy/{id}', [\App\Http\Controllers\QuotationController::class, 'destroy']);
         });

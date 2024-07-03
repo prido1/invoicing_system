@@ -8,30 +8,10 @@
     <div class="content-wrapper">
         <div class="container">
             <div class="add-quotation-form">
-                <div class="row">
-                    <div class="col-lg-12">
-                        @if(session('error'))
-                            <div id="error_m" class="alert alert-danger">
-                                {{session('error')}}
-                            </div>
-                        @endif
-                        @if(session('success'))
-                            <div id="success_m" class="alert alert-success">
-                                {{session('success')}}
-                            </div>
-                        @endif
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                    </div>
+                <div class="loading-container">
+                    <div class="lds-hourglass"></div>
                 </div>
-                <form action="/quotation/save" method="post" enctype="multipart/form-data">
+                <form id="quote_form" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-lg-12 mb-3">
@@ -49,18 +29,16 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-10">
-                                        <select id="client" name="client_id" class="form-control select2 w-100">
-                                            <option>Select Client</option>
+                                        <select id="client" name="client_id" class="form-control client_id select2 w-100">
+                                            <option value="">Select Client</option>
                                             @foreach($clients as $client)
-                                                <option @if(isset($quotation))
-                                                        @if($quotation->client_id == $client->id)
-                                                        selected
-                                                        @endif
-                                                        @endif value="{{$client->id}}">{{$client->name}}
+                                                <option
+                                                    value="{{$client->id}}">{{$client->name}}
                                                     ({{$client->company_name}})
                                                 </option>
                                             @endforeach
                                         </select>
+                                        <span class="invalid-feedback client_id"></span>
                                     </div>
                                 </div>
                             </div>
@@ -68,110 +46,114 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="create-date">Create Date</label>
-                                <div class="input-group date"  data-target-input="nearest">
+                                <div class="input-group date" data-target-input="nearest">
                                     <input
-                                        @if(isset($quotation)) value="{{\Carbon\Carbon::parse($quotation->create_date)->format('m/d/y')}}" @endif
-                                    id="create-date" name="create_date" type="text"
-                                        class="form-control datetimepicker-input" data-target="#create-date"/>
+                                        value=""
+                                        id="create-date" name="create_date" type="text"
+                                        class="form-control create_date datetimepicker-input" data-target="#create-date"/>
                                     <div class="input-group-append" data-target="#create-date"
                                          data-toggle="datetimepicker">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
                                 </div>
+                                <span class="invalid-feedback create_date"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="due-date">Due Date</label>
+                                <div class="input-group date" data-target-input="nearest">
+                                    <input
+                                        value=""
+                                        id="due-date" name="due_date" type="text"
+                                        class="form-control due_date datetimepicker-input" data-target="#due-date"/>
+                                    <div class="input-group-append" data-target="#due-date"
+                                         data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                                <span class="invalid-feedback due_date"></span>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="note">Note</label>
-                                <textarea name="note" id="note" class="form-control"
-                                          rows="3"> @if(isset($quotation)) {{$quotation->note}} @endif</textarea>
+                                <textarea name="note" id="note" class="form-control note"
+                                          rows="3"> </textarea>
+                                <span class="invalid-feedback note"></span>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="terms">Terms & Conditions</label>
-                                <textarea name="terms_conditions" id="terms" class="form-control"
-                                          rows="3"> @if(isset($quotation)) {{$quotation->terms_condition}} @endif</textarea>
+                                <textarea name="terms_conditions" id="terms" class="form-control terms_conditions"
+                                          rows="3"></textarea>
+                                <span class="invalid-feedback terms_conditions"></span>
                             </div>
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group">
                                 <label for="discount">Discount</label>
-                                <input @if(isset($quotation)) value="{{$quotation->discount}}" @endif id="discount"
-                                       name="discount" class="form-control" value="0" placeholder="Discount">
+                                <input value="" id="discount"
+                                       name="discount" class="form-control discount" placeholder="Discount">
+                                <span class="invalid-feedback discount"></span>
                             </div>
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group">
                                 <label for="discount">Vat %</label>
-                                <input @if(isset($quotation)) value="{{$quotation->vat}}" @endif id="vat"
-                                       name="vat" class="form-control" value="0" placeholder="Vat %">
+                                <input value="" id="vat"
+                                       name="vat" class="form-control vat" placeholder="Vat in %">
+                                <span class="invalid-feedback vat"></span>
                             </div>
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group">
                                 <label for="payment_currency">Payment Currency</label>
-                                <select class="form-control" id="payment_currency" name="payment_currency">
+                                <select class="form-control payment_currency" id="payment_currency" name="payment_currency">
                                     <option value="">Select Currency</option>
                                     @foreach($payment_currency as $currency)
-                                        <option @if(isset($quotation) && $quotation->payment_currency == $currency->id) selected @endif value="{{$currency->id}}">{{$currency->name}}</option>
+                                        <option
+                                            value="{{$currency->id}}">{{$currency->name}}</option>
                                     @endforeach
                                 </select>
+                                <span class="invalid-feedback payment_currency"></span>
                             </div>
                         </div>
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <label for="payment_type">Payment Type</label>
-                                <select class="form-control" id="payment_type" name="payment_type">
+                                <select class="form-control payment_type" id="payment_type" name="payment_type">
                                     <option value="">Select Type</option>
                                     @foreach($payment_type as $type)
-                                        <option @if(isset($quotation) && $quotation->payment_type == $type->id) selected @endif value="{{$type->id}}">{{$type->name}}</option>
+                                        <option
+                                            value="{{$type->id}}">{{$type->name}}</option>
                                     @endforeach
                                 </select>
+                                <span class="invalid-feedback payment_type"></span>
                             </div>
                         </div>
                         <div class="col-lg-12 items_wrapper">
-                            @if(!isset($quotation))
-                                <div class="row py-1" id="items_row_1">
-                                    <div class="col-lg-2">
-                                        <input name="quantity[]" value="1" class="form-control quantity"
-                                               placeholder="Quantity">
-                                    </div>
-                                    <div class="col-lg-5">
-                                        <input name="description[]" class="form-control description"
-                                               placeholder="Description">
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <input name="unit_price[]" class="form-control unit_price"
-                                               placeholder="Unit Price">
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <input class="form-control total_price" placeholder="Total Price" disabled>
-                                    </div>
+                            <div class="row py-1" id="items_row_0">
+                                <div class="col-lg-2">
+                                    <input name="quantity[]" value="1" class="form-control quantity quantity_0"
+                                           placeholder="Quantity">
+                                    <span class="invalid-feedback quantity_0"></span>
                                 </div>
-                            @endif
-                            @if(isset($quotation))
-                                @foreach($quotation->items as $item)
-                                    <div class="row py-1" id="items_row_1">
-                                        <div class="col-lg-2">
-                                            <input name="quantity[]" value="{{$item->quantity}}" class="form-control quantity"
-                                                   placeholder="Quantity">
-                                        </div>
-                                        <div class="col-lg-5">
-                                            <input name="description[]" value="{{$item->description}}" class="form-control description"
-                                                   placeholder="Description">
-                                        </div>
-                                        <div class="col-lg-2">
-                                            <input name="unit_price[]" value="{{$item->unit_price}}" class="form-control unit_price"
-                                                   placeholder="Unit Price">
-                                        </div>
-                                        <div class="col-lg-2">
-                                            <input class="form-control total_price" placeholder="Total Price" disabled>
-                                        </div>
-                                        <button class="btn btn-danger remove_btn"><i class="fa fa-trash"></i></button>
-                                    </div>
-                                @endforeach
-                            @endif
+                                <div class="col-lg-5">
+                                    <input name="description[]" class="form-control description_0"
+                                           placeholder="Description">
+                                    <span class="invalid-feedback description_0"></span>
+                                </div>
+                                <div class="col-lg-2">
+                                    <input name="unit_price[]" class="form-control unit_price unit_price_0"
+                                           placeholder="Unit Price">
+                                    <span class="invalid-feedback unit_price_0"></span>
+                                </div>
+                                <div class="col-lg-2">
+                                    <input class="form-control total_price" placeholder="Total Price" disabled>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-lg-12 mt-2">
                             <button type="button" class="btn btn-primary add_btn"><i class="fa fa-plus"></i></button>
@@ -185,7 +167,8 @@
                                             <span>Total</span>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input @if(isset($quotation)) value="{{$total_price}}" @endif id="total" disabled class="form-control">
+                                            <input name="total" id="total"
+                                                   disabled class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -193,7 +176,8 @@
                                             <span>Vat %</span>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input @if(isset($quotation)) value="{{$quotation->vat}}" @endif id="vat_total" disabled class="form-control">
+                                            <input name="vat_total" id="vat_total"
+                                                   disabled class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -201,7 +185,8 @@
                                             <span>Discount</span>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input @if(isset($quotation)) value="{{$quotation->discount}}" @endif id="discountt" disabled class="form-control">
+                                            <input
+                                                name="discount" id="discountt" disabled class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -209,7 +194,8 @@
                                             <span>Grand Total</span>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input @if(isset($quotation)) value="{{($invoice->vat / 100 + 1) * ($total_price - $quotation->discount)}}" @endif id="grand_total" disabled class="form-control">
+                                            <input name="grand_total"
+                                                   id="grand_total" disabled class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -277,8 +263,42 @@
 @push('scripts')
     <script>
 
+        $('#quote_form').on('submit', function (e) {
+            e.preventDefault();
+            $('.form-control').removeClass('is-invalid');
+            $('.invalid-feedback').text('');
+            $('.loading-container').css('display', 'flex');
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: '{{route('quotation.save')}}',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    $('.loading-container').hide();
+                    window.location.href = response.redirect;
+                },
+                error: function (xhr) {
+                    $('.loading-container').hide();
+                    if (xhr.status === 422) {
+                        // Display validation errors
+                        var errors = xhr.responseJSON.errors;
+
+                        for (const key in errors) {console.log(key.replace('.', '_'))
+                            let span = $(`.${key.replace('.', '_')}.invalid-feedback`);
+                            span.text(`${errors[key][0]}`);
+                            const previousElement = $('.form-control.'+key.replace('.', '_'));
+                            previousElement.addClass('is-invalid')
+                        }
+                    } else {
+                        // Handle other errors
+                    }
+                }
+            });
+        });
+
         $(document).ready(function () {
-            var count = 1;
+            var count = 0;
             var total = 0;
             var grand_total = 0;
             var discount = 0;
@@ -291,21 +311,28 @@
 
             $(addBtn).click(function () {
                 count++;
-                $(wrapper).append(' <div class="row py-1" id="items_row_' + count + '">\n' +
-                    '                        <div class="col-lg-2">\n' +
-                    '                            <input name="quantity[]" value="1" class="form-control quantity" placeholder="Quantity">\n' +
-                    '                        </div>\n' +
-                    '                        <div class="col-lg-5">\n' +
-                    '                            <input name="description[]" class="form-control description" placeholder="Description">\n' +
-                    '                        </div>\n' +
-                    '                        <div class="col-lg-2">\n' +
-                    '                            <input name="unit_price[]" class="form-control unit_price" placeholder="Unit Price">\n' +
-                    '                        </div>\n' +
-                    '                        <div class="col-lg-2">\n' +
-                    '                            <input class="form-control total_price" placeholder="Total Price" disabled>\n' +
-                    '                        </div>\n' +
-                    '                            <button class="btn btn-danger remove_btn"><i class="fa fa-trash"></i></button>\n' +
-                    '                    </div>');
+                $(wrapper).append(
+                    `<div class="row py-1" id="items_row_${count}">
+                                <div class="col-lg-2">
+                                    <input name="quantity[]" value="1" class="form-control quantity quantity_${count}"
+                                           placeholder="Quantity">
+                                    <span class="invalid-feedback quantity_${count}"></span>
+                                </div>
+                                <div class="col-lg-5">
+                                    <input name="description[]" class="form-control description_${count}"
+                                           placeholder="Description">
+                                    <span class="invalid-feedback description_${count}"></span>
+                                </div>
+                                <div class="col-lg-2">
+                                    <input name="unit_price[]" class="form-control unit_price unit_price_${count}"
+                                           placeholder="Unit Price">
+                                    <span class="invalid-feedback unit_price_${count}"></span>
+                                </div>
+                                <div class="col-lg-2">
+                                    <input class="form-control total_price" placeholder="Total Price" disabled>
+                                </div>
+                            </div>`
+                )
             })
 
             $(wrapper).on('click', '.remove_btn', function (e) {
@@ -332,7 +359,7 @@
                 total = 0;
                 grand_total = 0;
                 discount = discount_ff.val();
-                for (let i = 1; i < count + 1; i++) {
+                for (let i = 0; i < count + 1; i++) {
                     var wrap = $('#items_row_' + i);
                     var quantity = wrap.find('.quantity');
                     var unit_price = wrap.find('.unit_price');
@@ -349,7 +376,11 @@
                 total_f.val(total);
                 grand_total = (vat.val() / 100 + 1) * grand_total;
                 grand_total = Math.round(grand_total * 100) / 100;
-                grand_total_f.val(grand_total);
+                // grand_total_f.val(grand_total);
+                const myInput = document.getElementById('grand_total');
+
+
+                myInput.value = grand_total;
             }
         })
 
@@ -358,14 +389,16 @@
         $('#create-date').daterangepicker({
             singleDatePicker: true,
             showDropdowns: true,
-            autoUpdateInput: true
+            autoUpdateInput: true,
+            startDate: moment().subtract(6, 'days')
         });
 
         //Date range picker
         $('#due-date').daterangepicker({
             singleDatePicker: true,
             showDropdowns: true,
-            autoUpdateInput: true
+            autoUpdateInput: true,
+            startDate: moment().subtract(6, 'days')
         });
     </script>
 @endpush

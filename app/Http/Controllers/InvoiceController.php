@@ -128,7 +128,12 @@ class InvoiceController extends Controller
             'payment_type' => 'required',
             'payment_status' => 'required',
             'payment_currency' => 'required',
-        ]);
+            'quantity.*' => 'required',
+            'unit_price.*' => 'required',
+            'description.*' => 'required',
+        ], ['description.*.required'=>'Description required',
+            'unit_price.*.required'=>'Unit price required',
+            'quantity.*.required'=>'Quantity required']);
 
         $invoice = Invoice::create([
             'client_id' => $request->client_id,
@@ -153,7 +158,7 @@ class InvoiceController extends Controller
             ]);
         }
 
-        return redirect('invoice/view/' . $invoice->id);
+        return response()->json(['redirect'=>route('invoice.view', ['id'=>$invoice->id])]);
 
     }
 
@@ -196,7 +201,12 @@ class InvoiceController extends Controller
             'payment_type' => 'required',
             'payment_status' => 'required',
             'payment_currency' => 'required',
-        ]);
+            'quantity.*' => 'required',
+            'unit_price.*' => 'required',
+            'description.*' => 'required',
+        ], ['description.*.required'=>'Description required',
+            'unit_price.*.required'=>'Unit price required',
+            'quantity.*.required'=>'Quantity required']);
 
         $invoice = Invoice::find($id);
         $invoice->client_id = $request->client_id;
@@ -224,7 +234,7 @@ class InvoiceController extends Controller
             ]);
         }
 
-        return redirect('invoice/view/' . $invoice->id);
+        return response()->json(['redirect'=>route('invoice.view', ['id'=>$invoice->id])]);
     }
 
     //destroy
