@@ -26,7 +26,7 @@ class QuotationController extends Controller
         if (!Gate::allows('list', 'quotation')) {
             return response()->json(['message' => 'not authorized'], 403);
         }
-        $quotations = Quotation::paginate(15);
+        $quotations = Quotation::latest()->paginate(15);
         return view('modules.quotation.list-quotation')->with(['quotations' => $quotations]);
     }
 

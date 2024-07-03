@@ -27,7 +27,7 @@ class InvoiceController extends Controller
         if (!Gate::allows('list', 'invoice')) {
             return response()->json(['message' => 'not authorized'], 403);
         }
-        $invoices = Invoice::has('client')->paginate(15);
+        $invoices = Invoice::latest()->has('client')->paginate(15);
         return view('modules.invoice.list-invoice')->with(['invoices' => $invoices]);
     }
 

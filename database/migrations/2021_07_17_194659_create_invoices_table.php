@@ -20,18 +20,18 @@ class CreateInvoicesTable extends Migration
             $table->unsignedBigInteger('payment_type');
             $table->unsignedBigInteger('payment_status');
             $table->unsignedBigInteger('payment_currency');
-            $table->integer('discount')->nullable();;
-            $table->integer('vat')->nullable();;
-            $table->date('create_date')->nullable();;
-            $table->date('due_date')->nullable();;
+            $table->integer('discount')->nullable();
+            $table->integer('vat')->nullable();
+            $table->date('create_date')->nullable();
+            $table->date('due_date')->nullable();
             $table->longText('note')->nullable();
-            $table->longText('terms_condition')->nullable();;
-            $table->longText('email_subject')->nullable();;
-            $table->longText('email_body')->nullable();;
-            $table->boolean('attach')->nullable();;
+            $table->longText('terms_condition')->nullable();
+            $table->longText('email_subject')->nullable();
+            $table->longText('email_body')->nullable();
+            $table->boolean('attach')->nullable();
             $table->boolean('is_schedule_sent')->default(false);
-            $table->boolean('is_scheduled')->nullable();;
-            $table->dateTime('schedule_date')->nullable();;
+            $table->boolean('is_scheduled')->nullable();
+            $table->dateTime('schedule_date')->nullable();
             $table->timestamps();
         });
     }
