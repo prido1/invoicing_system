@@ -15,15 +15,18 @@
             margin: 0 auto;
             padding-top: 50px;
         }
+
         table {
             border-spacing: 0;
             border-collapse: collapse;
             font-size: 12px;
         }
+
         td,
         th {
             padding: 0;
         }
+
         @media print {
             * {
                 color: #000 !important;
@@ -31,87 +34,109 @@
                 background: transparent !important;
                 box-shadow: none !important;
             }
+
             a,
             a:visited {
                 text-decoration: underline;
             }
+
             a[href]:after {
                 content: " (" attr(href) ")";
             }
+
             abbr[title]:after {
                 content: " (" attr(title) ")";
             }
+
             a[href^="javascript:"]:after,
             a[href^="#"]:after {
                 content: "";
             }
+
             pre,
             blockquote {
                 border: 1px solid #999;
 
                 page-break-inside: avoid;
             }
+
             thead {
                 display: table-header-group;
             }
+
             tr,
             img {
                 page-break-inside: avoid;
             }
+
             img {
                 max-width: 100% !important;
             }
+
             p,
             h2,
             h3 {
                 orphans: 3;
                 widows: 3;
             }
+
             h2,
             h3 {
                 page-break-after: avoid;
             }
+
             select {
                 background: #fff !important;
             }
+
             .navbar {
                 display: none;
             }
+
             .table td,
             .table th {
                 background-color: #fff !important;
             }
+
             .btn > .caret,
             .dropup > .btn > .caret {
                 border-top-color: #000 !important;
             }
+
             .label {
                 border: 1px solid #000;
             }
+
             .table {
                 border-collapse: collapse !important;
             }
+
             .table-bordered th,
             .table-bordered td {
                 border: 1px solid #ddd !important;
             }
         }
+
         table {
             max-width: 100%;
             background-color: transparent;
             font-size: 12px;
         }
+
         th {
             text-align: left;
         }
+
         .table {
             width: 100%;
             margin-bottom: 10px;
         }
+
         .head {
             border-top: 0px solid #e2e7eb;
             border-bottom: 0px solid #e2e7eb;
         }
+
         .table > thead > tr > th,
         .table > tbody > tr > th,
         .table > tfoot > tr > th,
@@ -123,6 +148,7 @@
             vertical-align: top;
             border-top: 1px solid #e2e7eb;
         }
+
         /*ini edit default value : border top 1px to 0 px*/
         .table > thead > tr > th {
             font-size: 12px;
@@ -139,12 +165,15 @@
         .table > thead:first-child > tr:first-child > td {
             border-top: 0;
         }
+
         .table > tbody + tbody {
             border-top: 2px solid #e2e7eb;
         }
+
         .table .table {
             background-color: #fff;
         }
+
         .table-condensed > thead > tr > th,
         .table-condensed > tbody > tr > th,
         .table-condensed > tfoot > tr > th,
@@ -153,9 +182,11 @@
         .table-condensed > tfoot > tr > td {
             padding: 5px;
         }
+
         .table-bordered {
             border: 1px solid #e2e7eb;
         }
+
         .table-bordered > thead > tr > th,
         .table-bordered > tbody > tr > th,
         .table-bordered > tfoot > tr > th,
@@ -164,26 +195,34 @@
         .table-bordered > tfoot > tr > td {
             border: 1px solid #e2e7eb;
         }
+
         .table-bordered > thead > tr > th,
         .table-bordered > thead > tr > td {
             border-bottom-width: 2px;
         }
+
         .table-striped > tbody > tr:nth-child(odd) > td,
         .table-striped > tbody > tr:nth-child(odd) > th {
             background-color: #f0f3f5;
         }
-        .company-details{
+
+        .company-details {
             text-align: right;
         }
-        .company-details span{
+
+        .company-details span {
             font-size: 12px;
-            display: flex; align-items: center; justify-content: space-between;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        .company-details strong{
+
+        .company-details strong {
             white-space: nowrap;
         }
-        #page-wrap-inner{
-            padding: 20px;
+
+        #page-wrap-inner {
+
         }
 
     </style>
@@ -200,10 +239,13 @@
                     <span style="font-size: 20px;"><strong>{{ $settings['app_name'] ?? '' }}</strong></span>
                     <span><strong>Address:  </strong>{{ $settings['app_address'] ?? '' }}</span>
                     <span>
-                                    <strong>Email(s):  </strong>
-                                    {!! implode('<br>', explode(',', $settings['app_email'])) !!}
-                                </span>
-                    <span> <strong>Phone Number(s):  </strong>{!! implode('<br>', explode(',', $settings['app_phone'])) !!}</span>
+                        <strong>Email(s): </strong>
+                        {!! implode('<br>', explode(',', $settings['app_email'])) !!}
+                    </span>
+                    <span>
+                        <strong>Phone Number(s): </strong>
+                        {!! implode('<br>', explode(',', $settings['app_phone'])) !!}
+                    </span>
                 </td>
             </tr>
         </table>
@@ -313,20 +355,20 @@
             <tr>
                 <td>
                     @if($quotation->note)
-                    <b>Note:</b>
-                    <p class="text-muted well well-sm no-shadow">
-                        {{ $quotation->note }}
-                    </p>
+                        <b>Note:</b>
+                        <p class="text-muted well well-sm no-shadow">
+                            {{ $quotation->note }}
+                        </p>
                     @endif
                 </td>
             </tr>
             <tr>
                 <td width="100%">
                     @if($quotation->terms_condition)
-                    <b>Terms & Conditions:</b>
-                    <p class="text-muted well well-sm no-shadow" style="">
-                        {{ $quotation->terms_condition }}
-                    </p>
+                        <b>Terms & Conditions:</b>
+                        <p class="text-muted well well-sm no-shadow" style="">
+                            {{ $quotation->terms_condition }}
+                        </p>
                     @endif
                 </td>
             </tr>
@@ -334,10 +376,10 @@
         <br>
         <table width="100%">
             <tbody>
-                <tr>
+            <tr>
 
-                    <td width="30%">
-                        @if(config('config.EMAIL.show_bank') == 1)
+                <td width="30%">
+                    @if(config('config.EMAIL.show_bank') == 1)
                         <table width="100%">
                             <tr>
                                 <td><h6>Bank Details</h6></td>
@@ -359,10 +401,10 @@
                                 <td>{{config('config.EMAIL.acc_number')}}</td>
                             </tr>
                         </table>
-                        @endif
-                    </td>
+                    @endif
+                </td>
 
-                    @if(config('config.EMAIL.show_nostro_1') == 1)
+                @if(config('config.EMAIL.show_nostro_1') == 1)
                     <td width="30%">
                         <table width="100%">
                             <tr>
@@ -386,9 +428,9 @@
                             </tr>
                         </table>
                     </td>
-                    @endif
+                @endif
 
-                    @if(config('config.EMAIL.show_nostro_2') == 1)
+                @if(config('config.EMAIL.show_nostro_2') == 1)
                     <td width="30%">
                         <table width="100%">
                             <tr>
@@ -412,9 +454,9 @@
                             </tr>
                         </table>
                     </td>
-                    @endif
+                @endif
 
-                    @if(config('config.EMAIL.show_eco') == 1)
+                @if(config('config.EMAIL.show_eco') == 1)
                     <td width="30%" style="float: right;">
                         <table width="100%">
                             <tr>
@@ -430,9 +472,9 @@
                             </tr>
                         </table>
                     </td>
-                    @endif
+                @endif
 
-                </tr>
+            </tr>
             </tbody>
         </table>
 
@@ -449,7 +491,8 @@
                 </td>
                 <td width="30%">
                     @if(\Illuminate\Support\Facades\Auth::user()->signature_path)
-                        <img style="width: 200px;height: 30px" src="{{asset(\Illuminate\Support\Facades\Auth::user()->signature_path)}}">
+                        <img style="width: 200px;height: 30px"
+                             src="{{asset(\Illuminate\Support\Facades\Auth::user()->signature_path)}}">
                     @endif
                     <hr>
                     Authority Signature

@@ -292,7 +292,7 @@
             white-space: nowrap;
         }
         #page-wrap-inner{
-            padding: 20px;
+
         }
 
     </style>
