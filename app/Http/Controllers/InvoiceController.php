@@ -144,9 +144,9 @@ class InvoiceController extends Controller
             'payment_type' => $request->payment_type,
             'payment_status' => $request->payment_status,
             'payment_currency' => $request->payment_currency,
-            'discount' => $request->discount,
+            'discount' => $request->discount ?? 0,
             'terms_condition' => $request->terms_conditions,
-            'vat' => $request->vat
+            'vat' => $request->vat ?? 0
         ]);
 
         foreach ($request->quantity as $key => $value) {
@@ -217,9 +217,9 @@ class InvoiceController extends Controller
         $invoice->payment_type = $request->payment_type;
         $invoice->payment_status = $request->payment_status;
         $invoice->payment_currency = $request->payment_currency;
-        $invoice->discount = $request->discount;
+        $invoice->discount = $request->discount ?? 0;
         $invoice->terms_condition = $request->terms_conditions;
-        $invoice->vat = $request->vat;
+        $invoice->vat = $request->vat ?? 0;
         $invoice->update();
 
         $items = InvoiceItem::where('invoice_id', $invoice->id);

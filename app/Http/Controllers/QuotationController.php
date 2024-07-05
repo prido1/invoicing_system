@@ -138,9 +138,9 @@ class QuotationController extends Controller
             'payment_type' => $request->payment_type,
             'payment_status' => $request->payment_status,
             'payment_currency' => $request->payment_currency,
-            'discount' => $request->discount,
+            'discount' => $request->discount ?? 0,
             'terms_condition' => $request->terms_conditions,
-            'vat' => $request->vat
+            'vat' => $request->vat ?? 0
         ]);
 
         foreach ($request->quantity as $key => $value) {
@@ -207,9 +207,9 @@ class QuotationController extends Controller
         $quotation->note = $request->note;
         $quotation->payment_type = $request->payment_type;
         $quotation->payment_currency = $request->payment_currency;
-        $quotation->discount = $request->discount;
+        $quotation->discount = $request->discount ?? 0;
         $quotation->terms_condition = $request->terms_conditions;
-        $quotation->vat = $request->vat;
+        $quotation->vat = $request->vat ?? 0;
         $quotation->update();
 
         $items = QuotationItem::where('quotation_id', $quotation->id);
