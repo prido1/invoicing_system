@@ -37,16 +37,15 @@ class CustomConfigServiceProvider extends ServiceProvider
 
             $imap_settings = DB::table('settings')->where('type', 'imap')->pluck('description', 'label');
             if (!$imap_settings->isEmpty()) {
-                json_decode($smtp_settings['from']);
-                $smtp_config = [
-                    'ImapHost' => $smtp_settings['imap_host'],
-                    'ImapPort' => $smtp_settings['imap_port'],
-                    'ImapEncryption' => $smtp_settings['imap_encryption'],
-                    'ImapUser' => $smtp_settings['imap_user'],
-                    'ImapPass' => $smtp_settings['imap_pass'],
-                    'ImapSentFolder' => $smtp_settings['imap_sent_folder'],
+                $imap_config = [
+                    'ImapHost' => $imap_settings['imap_host'],
+                    'ImapPort' => $imap_settings['imap_port'],
+                    'ImapEncryption' => $imap_settings['imap_encryption'],
+                    'ImapUser' => $imap_settings['imap_user'],
+                    'ImapPass' => $imap_settings['imap_pass'],
+                    'ImapSentFolder' => $imap_settings['imap_sent_folder'],
                 ];
-                config(['mail.imap' => $smtp_config]);
+                config(['mail.imap' => $imap_config]);
             }
 
             $email_settings = DB::table('settings')->where('type', 'email')->pluck('description', 'label');
